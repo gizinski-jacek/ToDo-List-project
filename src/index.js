@@ -25,43 +25,50 @@ const editTask = document.getElementById('editTask');
 const editProj = document.getElementById('editProj');
 
 newItem.onclick = () => {
-    modalNewPage.classList.toggle('show');
+    modalClose(modalNewPage);
+    modalNewTask.style.display = 'flex';
 }
 
 newTaskBtn.onclick = () => {
-    modalNewProject.style.display = 'none';
+    modalClose(modalNewPage);
     modalNewTask.style.display = 'flex';
 }
 
 newProjectBtn.onclick = () => {
-    modalNewTask.style.display = 'none';
+    modalClose(modalNewPage);
     modalNewProject.style.display = 'flex';
 }
 
 window.onclick = (e) => {
-    if (e.target == modalNewPage) {
-        modalClose(modalNewPage);
-    } else if (e.target == modalEditProj) {
-        modalClose(modalEditProj);
-    } else if (e.target == modalEditTask) {
-        modalClose(modalEditTask);
+    let check1 = e.target == modalNewPage;
+    let check2 = e.target == modalEditTask;
+    let check3 = e.target == modalEditProj;
+    if (check1 || check2 || check3) {
+        modalClose();
     }
 }
 
 buttonsX.forEach(cancel => {
-    cancel.onclick = (e) => {
-        modalClose(e.target.parentElement.parentElement.parentElement);
+    cancel.onclick = () => {
+        modalClose();
     }
 })
 
 cancels.forEach(cancel => {
-    cancel.onclick = (e) => {
-        modalClose(e.target.parentElement.parentElement.parentElement.parentElement.parentElement);
+    cancel.onclick = () => {
+        modalClose();
     }
 })
 
-const modalClose = (modal) => {
-    modal.classList.toggle('show');
+const modalClose = (modal = undefined) => {
+    modalNewPage.style.display = 'none';
+    modalNewTask.style.display = 'none';
+    modalNewProject.style.display = 'none';
+    modalEditTask.style.display = 'none';
+    modalEditProj.style.display = 'none';
+    if (modal !== undefined) {
+        modal.style.display = 'flex';
+    }
 }
 
 confirms.forEach(confirm => {
@@ -71,9 +78,9 @@ confirms.forEach(confirm => {
             alert('No task name provided!');
         } else {
             if (form.id == 'modalNewTask') {
-                grabTaskData(form);
+                saveTaskData(form);
             } else if (form.id == 'modalNewProject') {
-                grabProjectData(form);
+                saveProjectData(form);
             }
         }
     }
@@ -87,7 +94,7 @@ confirmEdit.forEach(confirm => {
         } else {
             if (form.id == 'editTask') {
                 editTaskData(form);
-            } else if (form.id == 'editTask') {
+            } else if (form.id == 'editProj') {
                 editProjectData(form);
             }
         }
@@ -95,11 +102,27 @@ confirmEdit.forEach(confirm => {
 })
 
 const editTaskData = (data) => {
-    // data.className
+    console.log(data)
+    let taskIndex = tasksList.findIndex(task => task.title == data.className);
+    tasksList[taskIndex].updateAllData(data[0].value, data[1].value, data[2].value, data[3].value);
+    saveAllLib();
+    displayTasks();
+    modalClose();
+    clearAllForms();
 }
 
 const editProjectData = (data) => {
-
+    let projIndex = projectsList.findIndex(proj => proj.title == data.className);
+    projectsList[projIndex].updateTitle = data[0].value;
+    tasksList.forEach(task => {
+        if (task.targetProject == data.className) {
+            task.updateTargetProject = data[0].value;;
+        }
+    })
+    saveAllLib();
+    displayProjects();
+    modalClose();
+    clearAllForms();
 }
 
 inbox.addEventListener('click', (e) => {
@@ -114,18 +137,20 @@ projectsDropdown.onclick = () => {
 // 1...2,,,3   4---5
 // 2010-13-35
 // 2022-01-01
-const grabTaskData = (data) => {
-    let taskDate = data[2].value.split(/[\s\,\.\-]+/)
-    let taskYear = taskDate[0];
-    let taskMonth = taskDate[1];
-    let taskDay = taskDate[2];
-    if (checkDateFormat(taskYear, taskMonth, taskDay) == false) {
+const saveTaskData = (data) => {
+    let title = data[0].value;
+    let description = data[1].value;
+    let dueDate = data[2].value;
+    let priority = data[3].value;
+    let targetProject = currentOpenProject;
+    let dateArray = data[2].value.split(/[\s\,\.\-]+/)
+    if (checkDateFormat(dateArray[0], dateArray[1], dateArray[2]) == false) {
         alert('Wrong date!');
     } else {
-        new Task(data[0].value, data[1].value, data[2].value, 
-            data[3].value, currentOpenProject);
+        new Task(title, description, dueDate, priority, targetProject);
+        saveAllLib();
         displayTasks();
-        modalClose(data.parentElement.parentElement.parentElement);
+        modalClose();
         clearAllForms();
     }
 }
@@ -133,6 +158,9 @@ const grabTaskData = (data) => {
 const checkDateFormat = (year, month, day) => {
     let today = new Date();
     if (year == undefined || month == undefined || day == undefined) {
+        return false;
+    }
+    if (new Date(year, month, day) < new Date()) {
         return false;
     }
     if ((year < today.getFullYear()) || (year > 9999)) {
@@ -146,8 +174,9 @@ const checkDateFormat = (year, month, day) => {
     }
 }
 
-const grabProjectData = (data) => {
+const saveProjectData = (data) => {
     new Project(data[0].value);
+    saveAllLib();
     displayProjects();
     modalClose();
     clearAllForms();
@@ -197,7 +226,7 @@ const createPara = (text) => {
 
 const createTaskContainer = (item) => {
     let div = document.createElement('div');
-    div.id = 'task#' + tasksList.indexOf(item);
+    div.id = 'task__' + item.title;
     div.classList.add('task');
 
     let cont = document.createElement('div');
@@ -216,7 +245,7 @@ const createTaskContainer = (item) => {
 
 const createProjectContainer = (item) => {
     let div = document.createElement('div');
-    div.id = 'project#' + projectsList.indexOf(item);
+    div.id = 'project__' + item.title;
     div.classList.add('project');
 
     let cont = document.createElement('button');
@@ -267,24 +296,28 @@ const clearAllForms = () => {
 }
 
 const deleteItem = (el) => {
-    let arr = el.id.split('#');
+    let arr = el.id.split('__');
     if (arr[0] == 'task') {
-        tasksList.splice(arr[1], 1);
+        let taskIndex = tasksList.findIndex(task => task.title == arr[1])
+        tasksList.splice(taskIndex, 1);
     } else if (arr[0] == 'project') {
-        projectsList.splice(arr[1], 1);
+        let projIndex = projectsList.findIndex(proj => proj.title == arr[1])
+        projectsList.splice(projIndex, 1);
     }
     el.remove();
 }
 
 const editItem = (el) => {
-    let arr = el.id.split('#');
+    let arr = el.id.split('__');
     if (arr[0] == 'task') {
-        loadEditTask(tasksList[arr[1]]);
-        modalEditTask.classList.toggle('show');
+        let findTask = tasksList.find(task => task.title == arr[1])
+        loadEditTask(findTask);
+        modalEditTask.style.display = 'flex';
         editTask.className = arr[1];
     } else if (arr[0] == 'project') {
-        loadEditProject(projectsList[arr[1]]);
-        modalEditProj.classList.toggle('show');
+        let findProj = projectsList.find(proj => proj.title == arr[1])
+        loadEditProject(findProj);
+        modalEditProj.style.display = 'flex';
         editProj.className = arr[1];
     }
 }
@@ -326,6 +359,9 @@ class Project {
         projectsList.push(this);
         saveProjLib();
     }
+    set updateTitle(updateTitle) {
+        this.title = updateTitle;
+    }
 }
 
 class Task {
@@ -338,16 +374,38 @@ class Task {
         tasksList.push(this);
         saveTaskLib();
     }
+    set updateTitle(updateTitle) {
+        this.title = updateTitle;
+    }
+    set updateDescription(updateDescription) {
+        this.description = updateDescription;
+    }
+    set updatePriority(updatePriority) {
+        this.priority = updatePriority;
+    }
+    set updateDueDate(updateDueDate) {
+        this.dueDate = updateDueDate;
+    }
+    set updateTargetProject(updateTargetProject) {
+        this.targetProject = updateTargetProject;
+    }
+    updateAllData(data0, data1, data2, data3) {
+        this.updateTitle = data0;
+        this.updateDescription = data1;
+        this.updateDueDate = data2;
+        this.updatePriority = data3;
+    }
 }
 
 let new123test = new Project(11);
 let new234test = new Project('As');
 let new345test = new Project('as');
 
-let new666 = new Task(555, 555, '2022-01-01', 4, 'Inbox');
-let new667 = new Task(666, 666, '2024-04-04', 1, '11');
-let new778 = new Task(777, 777, '2026-07-07', 2, 'As');
-let new889 = new Task(888, 888, '2028-10-10', 3, 'as');
+let new666 = new Task(555, 555, '2022-01-01', 'high', 'Inbox');
+let new667 = new Task(666, 666, '2024-04-04', 'medium', '11');
+let new778 = new Task(777, 777, '2026-07-07', 'low', 'As');
+let new889 = new Task(888, 888, '2028-10-10', 'medium', 'as');
+let new989 = new Task(989, 989, '2028-10-10', 'low', 'as');
 
 displayProjects();
 displayTasks();
