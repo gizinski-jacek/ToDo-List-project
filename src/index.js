@@ -23,6 +23,7 @@ const cancels = document.querySelectorAll('.cancel');
 const buttonsX = document.querySelectorAll('.button-X');
 const editTask = document.getElementById('editTask');
 const editProj = document.getElementById('editProj');
+const selectList = document.querySelectorAll('.selectList');
 
 newItem.onclick = () => {
     modalClose(modalNewPage);
@@ -57,9 +58,13 @@ buttonsX.forEach(cancel => {
 cancels.forEach(cancel => {
     cancel.onclick = () => {
         modalClose();
+        clearForms();
     }
 })
 
+//
+// Awaiting cleanup!
+//
 const modalClose = (modal = undefined) => {
     modalNewPage.style.display = 'none';
     modalNewTask.style.display = 'none';
@@ -89,6 +94,7 @@ confirms.forEach(confirm => {
 confirmEdit.forEach(confirm => {
     confirm.onclick = (e) => {
         let form = e.target.parentElement.parentElement;
+        console.log(form)
         if (form[0].value == '') {
             alert('No task name provided!');
         } else {
@@ -102,27 +108,24 @@ confirmEdit.forEach(confirm => {
 })
 
 const editTaskData = (data) => {
-    console.log(data)
-    let taskIndex = tasksList.findIndex(task => task.title == data.className);
-    tasksList[taskIndex].updateAllData(data[0].value, data[1].value, data[2].value, data[3].value);
-    saveAllLib();
+    let arr = data.className.split('__');
+    let taskIndex = tasksList.findIndex(task => (task.title === arr[0]) && (task.targetProject === arr[1]));
+    tasksList[taskIndex].updateAllData(data[0].value, data[1].value, data[2].value, data[3].value, data[4].value);
+    saveCloseClear();
     displayTasks();
-    modalClose();
-    clearAllForms();
 }
 
 const editProjectData = (data) => {
-    let projIndex = projectsList.findIndex(proj => proj.title == data.className);
+    console.log(data)
+    let projIndex = projectsList.findIndex(proj => proj.title === data.className);
     projectsList[projIndex].updateTitle = data[0].value;
     tasksList.forEach(task => {
-        if (task.targetProject == data.className) {
+        if (task.targetProject === data.className) {
             task.updateTargetProject = data[0].value;;
         }
     })
-    saveAllLib();
+    saveCloseClear();
     displayProjects();
-    modalClose();
-    clearAllForms();
 }
 
 inbox.addEventListener('click', (e) => {
@@ -142,44 +145,39 @@ const saveTaskData = (data) => {
     let description = data[1].value;
     let dueDate = data[2].value;
     let priority = data[3].value;
-    let targetProject = currentOpenProject;
+    let targetProject = data[4].value;
     let dateArray = data[2].value.split(/[\s\,\.\-]+/)
-    if (checkDateFormat(dateArray[0], dateArray[1], dateArray[2]) == false) {
-        alert('Wrong date!');
-    } else {
+    if (checkDateFormat(dateArray[0], dateArray[1], dateArray[2])) {
         new Task(title, description, dueDate, priority, targetProject);
-        saveAllLib();
+        saveCloseClear();
         displayTasks();
-        modalClose();
-        clearAllForms();
     }
 }
 
 const checkDateFormat = (year, month, day) => {
     let today = new Date();
     if (year == undefined || month == undefined || day == undefined) {
+        alert('No date provided');
         return false;
-    }
-    if (new Date(year, month, day) < new Date()) {
+    } else if ((year < today.getFullYear()) || (year > 9999)) {
+        alert('Wrong year');
         return false;
-    }
-    if ((year < today.getFullYear()) || (year > 9999)) {
+    } else if ((month < 1) || (month > 12)) {
+        alert('Wrong month');
         return false;
-    }
-    if ((month < 1) || (month > 12)) {
+    } else if ((day < 1) || (day > today.getDate())) {
+        alert('Wrong day');
         return false;
-    }
-    if ((day < 1) || (day > 31)) {
-        return false;
+    } else {
+        return true;
     }
 }
 
 const saveProjectData = (data) => {
     new Project(data[0].value);
-    saveAllLib();
+    saveCloseClear();
+    updateSelectList();
     displayProjects();
-    modalClose();
-    clearAllForms();
 }
 
 const displayProjects = () => {
@@ -191,10 +189,10 @@ const displayProjects = () => {
 
 const displayTasks = () => {
     tasksContainer.innerHTML = '';
-    let h3 = document.createElement('h3');
-    h3.textContent = currentOpenProject;
-    tasksContainer.append(h3);
-    if (currentOpenProject == 'Inbox') {
+        let h3 = document.createElement('h3');
+        h3.textContent = currentOpenProject;
+        tasksContainer.append(h3);
+    if (currentOpenProject === 'Inbox') {
         tasksList.forEach(item => {
             tasksContainer.append(createTaskContainer(item));
         })
@@ -211,7 +209,6 @@ let currentOpenProject = tasksContainer.className;
 const updateCurrentOpenProject = (id) => {
     tasksContainer.className = id;
     currentOpenProject = id;
-    return currentOpenProject;
 }
 
 const filterTaskList = (projID) => {
@@ -226,15 +223,15 @@ const createPara = (text) => {
 
 const createTaskContainer = (item) => {
     let div = document.createElement('div');
-    div.id = 'task__' + item.title;
+    div.id = 'task__' + item.title + '__' + item.targetProject;
     div.classList.add('task');
 
-    let cont = document.createElement('div');
-    cont.append(createPara(item.title))
-    cont.append(createPara(item.description))
-    cont.append(createPara(item.dueDate))
-    cont.append(createPara(item.priority))
-    cont.append(createPara(item.targetProject))
+        let cont = document.createElement('div');
+        cont.append(createPara(item.title))
+        cont.append(createPara(item.description))
+        cont.append(createPara(item.dueDate))
+        cont.append(createPara(item.priority))
+        cont.append(createPara(item.targetProject))
 
     div.append(cont);
     div.append(createEditButton());
@@ -247,15 +244,13 @@ const createProjectContainer = (item) => {
     let div = document.createElement('div');
     div.id = 'project__' + item.title;
     div.classList.add('project');
-
-    let cont = document.createElement('button');
-    cont.setAttribute('type', 'button');
-    cont.textContent = item.title;
-    cont.addEventListener('click', () => {
-        updateCurrentOpenProject(item.title);
-        displayTasks();
-    })
-
+        let cont = document.createElement('button');
+        cont.setAttribute('type', 'button');
+        cont.textContent = item.title;
+        cont.addEventListener('click', () => {
+            updateCurrentOpenProject(item.title);
+            displayTasks();
+        })
     div.append(cont);
     div.append(createEditButton());
     div.append(createDeleteButton());
@@ -267,12 +262,11 @@ const createDeleteButton = () => {
     const deleteBtn = document.createElement('button');
     deleteBtn.setAttribute('type', 'button');
     deleteBtn.classList.add('deleteBtn');
-    deleteBtn.textContent = 'x';
+    deleteBtn.textContent = 'Dlt';
     deleteBtn.addEventListener('click', (e) => {
         deleteItem(e.target.parentElement);
         saveAllLib();
     })
-    
     return deleteBtn;
 }
 
@@ -280,28 +274,33 @@ const createEditButton = () => {
     const editBtn = document.createElement('button');
     editBtn.setAttribute('type', 'button');
     editBtn.classList.add('editBtn');
-    editBtn.textContent = '?';
+    editBtn.textContent = 'Edit';
     editBtn.addEventListener('click', (e) => {
         editItem(e.target.parentElement);
         saveAllLib();
     })
-
     return editBtn;
 }
 
-const clearAllForms = () => {
+const clearForms = () => {
     document.querySelectorAll('form').forEach(form => {
         form.reset();
     })
 }
 
+const saveCloseClear = () => {
+    saveAllLib();
+    modalClose();
+    clearForms();
+}
+
 const deleteItem = (el) => {
     let arr = el.id.split('__');
     if (arr[0] == 'task') {
-        let taskIndex = tasksList.findIndex(task => task.title == arr[1])
+        let taskIndex = tasksList.findIndex(task => (task.title === arr[1]) && (task.targetProject === arr[2]));
         tasksList.splice(taskIndex, 1);
     } else if (arr[0] == 'project') {
-        let projIndex = projectsList.findIndex(proj => proj.title == arr[1])
+        let projIndex = projectsList.findIndex(proj => proj.title === arr[1])
         projectsList.splice(projIndex, 1);
     }
     el.remove();
@@ -310,16 +309,32 @@ const deleteItem = (el) => {
 const editItem = (el) => {
     let arr = el.id.split('__');
     if (arr[0] == 'task') {
-        let findTask = tasksList.find(task => task.title == arr[1])
+        let findTask = tasksList.find(task => (task.title === arr[1]) && (task.targetProject === arr[2]));
         loadEditTask(findTask);
         modalEditTask.style.display = 'flex';
-        editTask.className = arr[1];
+        editTask.className = arr[1] + '__' + arr[2];
     } else if (arr[0] == 'project') {
-        let findProj = projectsList.find(proj => proj.title == arr[1])
+        let findProj = projectsList.find(proj => proj.title === arr[1]);
         loadEditProject(findProj);
         modalEditProj.style.display = 'flex';
         editProj.className = arr[1];
     }
+}
+
+const updateSelectList = () => {
+    selectList.forEach(select => {
+        select.innerHTML = '';
+        let inbox = document.createElement('option');
+        inbox.value = 'Inbox';
+        inbox.textContent = 'Inbox';
+        select.append(inbox);
+        projectsList.forEach(proj => {
+            let option = document.createElement('option');
+            option.value = proj.title;
+            option.textContent = proj.title;
+            select.append(option);
+        })
+    })
 }
 
 const loadEditTask = (item) => {
@@ -327,31 +342,12 @@ const loadEditTask = (item) => {
     editTask[1].value = item.description;
     editTask[2].value = item.dueDate;
     editTask[3].value = item.priority;
+    updateSelectList();
 }
 
 const loadEditProject = (item) => {
     editProj[0].value = item.title;
 }
-
-const projectsList = [];
-const tasksList = [];
-
-const saveAllLib = () => {
-    saveProjLib();
-    saveTaskLib();
-}
-
-const saveProjLib = () => {
-    localStorage.setItem('projectsList', JSON.stringify(projectsList));
-}
-
-const saveTaskLib = () => {
-    localStorage.setItem('tasksList', JSON.stringify(tasksList));
-}
-
-// function loadLib() {
-//     return JSON.parse(localStorage.getItem('tasksList'));
-// }
 
 class Project {
     constructor(title) {
@@ -389,24 +385,48 @@ class Task {
     set updateTargetProject(updateTargetProject) {
         this.targetProject = updateTargetProject;
     }
-    updateAllData(data0, data1, data2, data3) {
+    updateAllData(data0, data1, data2, data3, data4) {
         this.updateTitle = data0;
         this.updateDescription = data1;
         this.updateDueDate = data2;
         this.updatePriority = data3;
+        this.targetProject = data4;
     }
 }
 
-let new123test = new Project(11);
-let new234test = new Project('As');
-let new345test = new Project('as');
+const saveAllLib = () => {
+    saveProjLib();
+    saveTaskLib();
+}
 
-let new666 = new Task(555, 555, '2022-01-01', 'high', 'Inbox');
-let new667 = new Task(666, 666, '2024-04-04', 'medium', '11');
-let new778 = new Task(777, 777, '2026-07-07', 'low', 'As');
-let new889 = new Task(888, 888, '2028-10-10', 'medium', 'as');
-let new989 = new Task(989, 989, '2028-10-10', 'low', 'as');
+const saveTaskLib = () => {
+    localStorage.setItem('tasksList', JSON.stringify(tasksList));
+}
+
+const saveProjLib = () => {
+    localStorage.setItem('projectsList', JSON.stringify(projectsList));
+}
+
+const tasksList = JSON.parse(localStorage.getItem('tasksList')) || [];
+const projectsList = JSON.parse(localStorage.getItem('projectsList')) || [];
+
+const loadDefaults = () => {
+    let new123test = new Project('Kitchen');
+    let new234test = new Project('House');
+    let new345test = new Project('Gym');
+
+    let new666 = new Task('Jake Mail', 'Send Email to Jake about upcoming project', '2025-01-01', 'high', 'Inbox');
+    let new667 = new Task('Basement', 'Clean trash from basement', '2027-02-02', 'medium', 'House');
+    let new778 = new Task('Lightbulb', 'Replace lightbulb', '2027-03-03', 'low', 'Kitchen');
+    let new889 = new Task('Carpet', 'Clean the carpet', '2028-04-04', 'low', 'House');
+    let new989 = new Task('Gym', 'Renew gym subcription', '2029-05-05', 'medium', 'Gym');
+}
+
+if ((!localStorage.getItem('tasksList')) && (!localStorage.getItem('projectsList'))) {
+    loadDefaults();
+}
 
 displayProjects();
 displayTasks();
-clearAllForms();
+clearForms();
+updateSelectList();
