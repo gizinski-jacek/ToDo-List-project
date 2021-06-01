@@ -104,7 +104,6 @@ confirms.forEach(confirm => {
 confirmEdit.forEach(confirm => {
     confirm.onclick = (e) => {
         let form = e.target.parentElement.parentElement;
-        console.log(form)
         if (form[0].value == '') {
             alert('No task name provided!');
         } else {
@@ -126,7 +125,6 @@ const editTaskData = (data) => {
 }
 
 const editProjectData = (data) => {
-    console.log(data)
     let projIndex = projectsList.findIndex(proj => proj.title === data.className);
     projectsList[projIndex].updateTitle = data[0].value;
     tasksList.forEach(task => {
@@ -135,10 +133,23 @@ const editProjectData = (data) => {
         }
     })
     saveCloseClear();
+    // Needed for now
+    displayTasks();
+    //
     displayProjects();
 }
 
 inboxTasks.addEventListener('click', (e) => {
+    updateCurrentOpenProject(e.target.id);
+    displayTasks();
+})
+
+todayTasks.addEventListener('click', (e) => {
+    updateCurrentOpenProject(e.target.id);
+    displayTasks();
+})
+
+weekTasks.addEventListener('click', (e) => {
     updateCurrentOpenProject(e.target.id);
     displayTasks();
 })
@@ -156,18 +167,21 @@ const saveTaskData = (data) => {
     let dueDate = data[2].value;
     let priority = data[3].value;
     let targetProject = data[4].value;
-    let dateArray = data[2].value.split(/[\s\,\.\-]+/)
-    if (checkDateFormat(dateArray[0], dateArray[1], dateArray[2])) {
+    if (checkDateFormat(dueDate)) {
         new Task(title, description, dueDate, priority, targetProject);
         saveCloseClear();
         displayTasks();
     }
 }
 
-const checkDateFormat = (year, month, day) => {
+const checkDateFormat = (date) => {
+    let dateArray = date.split(/[\s\,\.\-]+/);
+    let year = dateArray[0];
+    let month = dateArray[1].padStart(2, 0);
+    let day = dateArray[2].padStart(2, 0);
     let today = new Date();
     if (year == undefined || month == undefined || day == undefined) {
-        alert('No date provided');
+        alert('Wrong date format');
         return false;
     } else if ((year < today.getFullYear()) || (year > 9999)) {
         alert('Wrong year');
@@ -199,30 +213,42 @@ const displayProjects = () => {
 
 const displayTasks = () => {
     tasksContainer.innerHTML = '';
-        let h3 = document.createElement('h3');
-        h3.textContent = currentOpenProject;
-        tasksContainer.append(h3);
-    if (currentOpenProject === 'Inbox') {
-        tasksList.forEach(item => {
-            tasksContainer.append(createTaskContainer(item));
-        })
-    } else {
-        let newList = filterTaskList(currentOpenProject);
-        newList.forEach(item => {
-            tasksContainer.append(createTaskContainer(item));
-        })
-    }
+    let h3 = document.createElement('h3');
+    h3.textContent = currentOpenProject;
+    tasksContainer.append(h3);
+
+    let filteredList = filterTaskList();
+    filteredList.forEach(task => {
+        tasksContainer.append(createTaskContainer(task));
+    })
 }
 
 let currentOpenProject = tasksContainer.className;
 
 const updateCurrentOpenProject = (id) => {
-    tasksContainer.className = id;
+    // tasksContainer.className = id;
     currentOpenProject = id;
 }
 
-const filterTaskList = (projID) => {
-    return tasksList.filter(item => item.targetProject == projID);
+const filterTaskList = () => {
+    let today = new Date();
+    let dateFormat = new Date(today.getTime() - (today.getTimezoneOffset() * 60000))
+        .toISOString()
+        .split("T")[0];
+    let newList = [];
+    if (currentOpenProject === 'Inbox') {
+        return tasksList;
+    } else if (currentOpenProject === 'Today') {
+        newList = tasksList.filter(item => item.dueDate == dateFormat);
+        return newList;
+    // } else if (currentOpenProject === 'Week') {
+    //     newList = tasksList.filter(item => item.dueDate >= dateFormat);
+    //     console.log(newList);
+    //     return newList;
+    } else {
+        newList = tasksList.filter(item => item.targetProject === currentOpenProject);
+        return newList;
+    }
 }
 
 const createPara = (text) => {
@@ -244,8 +270,8 @@ const createTaskContainer = (item) => {
         cont.append(createPara(item.targetProject))
 
     div.append(cont);
-    div.append(createEditButton());
     div.append(createDeleteButton());
+    div.append(createEditButton());
 
     return div;
 }
@@ -253,17 +279,17 @@ const createTaskContainer = (item) => {
 const createProjectContainer = (item) => {
     let div = document.createElement('div');
     div.id = 'project__' + item.title;
-    div.classList.add('project');
         let cont = document.createElement('button');
         cont.setAttribute('type', 'button');
+        cont.classList.add('project');
         cont.textContent = item.title;
         cont.addEventListener('click', () => {
             updateCurrentOpenProject(item.title);
             displayTasks();
         })
     div.append(cont);
-    div.append(createEditButton());
     div.append(createDeleteButton());
+    div.append(createEditButton());
 
     return div;
 }
@@ -427,12 +453,17 @@ const loadDefaults = () => {
 
     let new666 = new Task('Jake Mail', 'Send Email to Jake about upcoming project', '2025-01-01', 'high', 'Inbox');
     let new667 = new Task('Basement', 'Clean trash from basement', '2027-02-02', 'medium', 'House');
-    let new778 = new Task('Lightbulb', 'Replace lightbulb', '2027-03-03', 'low', 'Kitchen');
-    let new889 = new Task('Carpet', 'Clean the carpet', '2028-04-04', 'low', 'House');
-    let new989 = new Task('Gym', 'Renew gym subcription', '2029-05-05', 'medium', 'Gym');
+    let new778 = new Task('Lightbulb', 'Replace kitchen lightbulb', '2021-06-08', 'low', 'Kitchen');
+    let new889 = new Task('Carpet', 'Clean the carpet', '2021-06-01', 'low', 'House');
+    let new989 = new Task('Gym', 'Renew gym membership', '2029-05-05', 'medium', 'Gym');
 }
 
 if ((!localStorage.getItem('tasksList')) && (!localStorage.getItem('projectsList'))) {
+    loadDefaults();
+}
+
+// Should I populate with defaults if user decides to delete all projects and tasks?
+if ((tasksList.length === 0) && (projectsList.length === 0)) {
     loadDefaults();
 }
 
