@@ -6,7 +6,9 @@
 const projectsContainer = document.getElementById('projectsContainer');
 const tasksContainer = document.getElementById('tasksContainer');
 const projectsDropdown = document.getElementById('projectsDropdown');
-const inbox = document.getElementById('Inbox');
+const inboxTasks = document.getElementById('Inbox');
+const todayTasks = document.getElementById('Today');
+const weekTasks = document.getElementById('Week');
 const newItem = document.getElementById('newItem');
 const header = document.getElementById('header');
 const modalNewPage = document.getElementById('modalNewPage');
@@ -83,9 +85,17 @@ confirms.forEach(confirm => {
             alert('No task name provided!');
         } else {
             if (form.id == 'modalNewTask') {
-                saveTaskData(form);
+                if (tasksList.find(p => p.title === form[0].value)) {
+                    alert('Task already exists! Provide unique name.');
+                } else {
+                    saveTaskData(form);
+                }
             } else if (form.id == 'modalNewProject') {
-                saveProjectData(form);
+                if (projectsList.find(p => p.title === form[0].value)) {
+                     alert('Project already exists! Provide unique name.');
+                } else {
+                    saveProjectData(form);
+                }
             }
         }
     }
@@ -128,7 +138,7 @@ const editProjectData = (data) => {
     displayProjects();
 }
 
-inbox.addEventListener('click', (e) => {
+inboxTasks.addEventListener('click', (e) => {
     updateCurrentOpenProject(e.target.id);
     displayTasks();
 })
@@ -165,7 +175,7 @@ const checkDateFormat = (year, month, day) => {
     } else if ((month < 1) || (month > 12)) {
         alert('Wrong month');
         return false;
-    } else if ((day < 1) || (day > today.getDate())) {
+    } else if ((day < 1) || (day > new Date(year, month, 0).getDate())) {
         alert('Wrong day');
         return false;
     } else {
