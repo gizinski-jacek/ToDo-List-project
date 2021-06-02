@@ -10,17 +10,17 @@
     <div id="content">
         <div id='header'>
             <h1>ToDo</h1>
-            <button id='newItem'>+</button>
+            <span id='newItem'>+</span>
         </div>
         <div class="main">
             <div class="menu">
-                <button id="Inbox" type="button">Inbox</button>
-                <button id="Today" type="button">Today</button>
-                <button id="Week" type="button">Week</button>
-                <button id="projectsDropdown" type="button">Projects</button>
-                <div id="projectsContainer">
+                <div id="Inbox">Inbox</div>
+                <div id="Today">Today</div>
+                <div id="Week">Week</div>
+                <div id="projectsDropdown" type="button">Projects</div>
+                <span id="projectsContainer">
 
-                </div>
+                </span>
             </div>
             <div id="tasksContainer" class='Inbox'>
 
@@ -34,17 +34,17 @@
                 </div>
                 <div class="modalBody">
                     <div id="modalNewMenu">
-                        <button id='newTaskBtn' type="button">Task</button>
-                        <button id='newProjectBtn' type="button">Project</button>
+                        <span id='newTaskBtn'>Task</span>
+                        <span id='newProjectBtn'>Project</span>
                     </div>
                     <form id='modalNewTask'>
                         <input type='text' placeholder='Task Name'>
                         <textarea placeholder='Description'></textarea>
                         <input type='text' placeholder='Due Date: YYYY-MM-DD'>
                         <select>
-                            <option value='high' selected>High</option>
-                            <option value='medium'>Medium</option>
-                            <option value='low'>Low</option>
+                            <option value='High' selected>High</option>
+                            <option value='Medium'>Medium</option>
+                            <option value='Low'>Low</option>
                         </select>
                         <select class='selectList'>
                         
