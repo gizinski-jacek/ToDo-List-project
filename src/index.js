@@ -260,18 +260,18 @@ const createPara = (text) => {
 const createTaskContainer = (item) => {
     let div = document.createElement('div');
     div.id = 'task__' + item.title + '__' + item.targetProject;
-    div.classList.add('task');
+    div.classList.add('task', 'priority'+item.priority);
 
-        let cont = document.createElement('div');
-        cont.append(createPara(item.title))
-        cont.append(createPara(item.description))
-        cont.append(createPara(item.dueDate))
-        cont.append(createPara(item.priority))
-        cont.append(createPara(item.targetProject))
+    let cont = document.createElement('div');
+    cont.append(createPara(item.title))
+    cont.append(createPara(item.description))
+    cont.append(createPara(item.dueDate))
+    cont.append(createPara(item.priority))
+    cont.append(createPara(item.targetProject))
 
     div.append(cont);
-    div.append(createDeleteButton());
-    div.append(createEditButton());
+    div.append(createDelBtn());
+    div.append(createEditBtn());
 
     return div;
 }
@@ -279,26 +279,24 @@ const createTaskContainer = (item) => {
 const createProjectContainer = (item) => {
     let div = document.createElement('div');
     div.id = 'project__' + item.title;
-        let cont = document.createElement('button');
-        cont.setAttribute('type', 'button');
-        cont.classList.add('project');
-        cont.textContent = item.title;
-        cont.addEventListener('click', () => {
-            updateCurrentOpenProject(item.title);
-            displayTasks();
-        })
-    div.append(cont);
-    div.append(createDeleteButton());
-    div.append(createEditButton());
+    div.textContent = item.title;
+    div.classList.add('project');
+    div.addEventListener('click', () => {
+        updateCurrentOpenProject(item.title);
+        displayTasks();
+    })
+    div.append(createDelBtn());
+    div.append(createEditBtn());
 
     return div;
 }
 
-const createDeleteButton = () => {
-    const deleteBtn = document.createElement('button');
-    deleteBtn.setAttribute('type', 'button');
+const createDelBtn = () => {
+    const deleteBtn = document.createElement('input');
+    deleteBtn.setAttribute('type', 'image');
     deleteBtn.classList.add('deleteBtn');
-    deleteBtn.textContent = 'Dlt';
+    deleteBtn.src = 'imgs/delete-64.png';
+    deleteBtn.alt = 'Delete';
     deleteBtn.addEventListener('click', (e) => {
         deleteItem(e.target.parentElement);
         saveAllLib();
@@ -306,11 +304,12 @@ const createDeleteButton = () => {
     return deleteBtn;
 }
 
-const createEditButton = () => {
-    const editBtn = document.createElement('button');
-    editBtn.setAttribute('type', 'button');
+const createEditBtn = () => {
+    const editBtn = document.createElement('input');
+    editBtn.setAttribute('type', 'image');
     editBtn.classList.add('editBtn');
-    editBtn.textContent = 'Edit';
+    editBtn.src = 'imgs/edit-64.png';
+    editBtn.alt = 'Edit';
     editBtn.addEventListener('click', (e) => {
         editItem(e.target.parentElement);
         saveAllLib();
@@ -451,11 +450,11 @@ const loadDefaults = () => {
     let new234test = new Project('House');
     let new345test = new Project('Gym');
 
-    let new666 = new Task('Jake Mail', 'Send Email to Jake about upcoming project', '2025-01-01', 'high', 'Inbox');
-    let new667 = new Task('Basement', 'Clean trash from basement', '2027-02-02', 'medium', 'House');
-    let new778 = new Task('Lightbulb', 'Replace kitchen lightbulb', '2021-06-08', 'low', 'Kitchen');
-    let new889 = new Task('Carpet', 'Clean the carpet', '2021-06-01', 'low', 'House');
-    let new989 = new Task('Gym', 'Renew gym membership', '2029-05-05', 'medium', 'Gym');
+    let new666 = new Task('Jake Mail', 'Send Email to Jake about upcoming project', '2025-01-01', 'High', 'Inbox');
+    let new667 = new Task('Basement', 'Clean trash from basement', '2027-02-02', 'Medium', 'House');
+    let new778 = new Task('Lightbulb', 'Replace kitchen lightbulb', '2021-06-08', 'Low', 'Kitchen');
+    let new889 = new Task('Carpet', 'Clean the carpet', new Date().toISOString().split("T")[0], 'Low', 'House');
+    let new989 = new Task('Gym', 'Renew gym membership', new Date().toISOString().split("T")[0], 'Medium', 'Gym');
 }
 
 if ((!localStorage.getItem('tasksList')) && (!localStorage.getItem('projectsList'))) {
