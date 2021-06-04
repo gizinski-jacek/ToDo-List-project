@@ -3,49 +3,49 @@
 
 'use strict'
 
-const projectsContainer = document.getElementById('projectsContainer');
-const tasksContainer = document.getElementById('tasksContainer');
-const projectsDropdown = document.getElementById('projectsDropdown');
-const inboxTasks = document.getElementById('Inbox');
-const todayTasks = document.getElementById('Today');
-const weekTasks = document.getElementById('Week');
+const containerFolders = document.getElementById('containerFolders');
+const containerToDos = document.getElementById('containerToDos');
+const dropdownFolders = document.getElementById('dropdownFolders');
+const inboxToDos = document.getElementById('Inbox');
+const todayToDos = document.getElementById('Today');
+const weekToDos = document.getElementById('Week');
 const newItem = document.getElementById('newItem');
 const header = document.getElementById('header');
 const modalNewPage = document.getElementById('modalNewPage');
-const modalEditTask = document.getElementById('modalEditTask');
-const modalEditProj = document.getElementById('modalEditProj');
+const modalEditToDo = document.getElementById('modalEditToDo');
+const modalEditFolder = document.getElementById('modalEditFolder');
 const modalNewMenu = document.getElementById('modalNewMenu');
-const modalNewTask = document.getElementById('modalNewTask');
-const modalNewProject = document.getElementById('modalNewProject');
-const newTaskBtn = document.getElementById('newTaskBtn');
-const newProjectBtn = document.getElementById('newProjectBtn');
+const modalNewToDo = document.getElementById('modalNewToDo');
+const modalNewFolder = document.getElementById('modalNewFolder');
+const newToDoBtn = document.getElementById('newToDoBtn');
+const newFolderBtn = document.getElementById('newFolderBtn');
 const confirms = document.querySelectorAll('.confirm');
 const confirmEdit = document.querySelectorAll('.confirmEdit');
 const cancels = document.querySelectorAll('.cancel');
 const buttonsX = document.querySelectorAll('.button-X');
-const editTask = document.getElementById('editTask');
-const editProj = document.getElementById('editProj');
+const editToDo = document.getElementById('editToDo');
+const editFolder = document.getElementById('editFolder');
 const selectList = document.querySelectorAll('.selectList');
 
 newItem.onclick = () => {
     modalClose(modalNewPage);
-    modalNewTask.style.display = 'flex';
+    modalNewToDo.style.display = 'flex';
 }
 
-newTaskBtn.onclick = () => {
+newToDoBtn.onclick = () => {
     modalClose(modalNewPage);
-    modalNewTask.style.display = 'flex';
+    modalNewToDo.style.display = 'flex';
 }
 
-newProjectBtn.onclick = () => {
+newFolderBtn.onclick = () => {
     modalClose(modalNewPage);
-    modalNewProject.style.display = 'flex';
+    modalNewFolder.style.display = 'flex';
 }
 
 window.onclick = (e) => {
     let check1 = e.target == modalNewPage;
-    let check2 = e.target == modalEditTask;
-    let check3 = e.target == modalEditProj;
+    let check2 = e.target == modalEditToDo;
+    let check3 = e.target == modalEditFolder;
     if (check1 || check2 || check3) {
         modalClose();
     }
@@ -69,10 +69,10 @@ cancels.forEach(cancel => {
 //
 const modalClose = (modal = undefined) => {
     modalNewPage.style.display = 'none';
-    modalNewTask.style.display = 'none';
-    modalNewProject.style.display = 'none';
-    modalEditTask.style.display = 'none';
-    modalEditProj.style.display = 'none';
+    modalNewToDo.style.display = 'none';
+    modalNewFolder.style.display = 'none';
+    modalEditToDo.style.display = 'none';
+    modalEditFolder.style.display = 'none';
     if (modal !== undefined) {
         modal.style.display = 'flex';
     }
@@ -82,19 +82,19 @@ confirms.forEach(confirm => {
     confirm.onclick = (e) => {
         let form = e.target.parentElement.parentElement;
         if (form[0].value == '') {
-            alert('No task name provided!');
+            alert('No ToDo name provided!');
         } else {
-            if (form.id == 'modalNewTask') {
-                if (tasksList.find(p => p.title === form[0].value)) {
-                    alert('Task already exists! Provide unique name.');
+            if (form.id == 'modalNewToDo') {
+                if (libraryToDos.find(p => p.title === form[0].value)) {
+                    alert('ToDo already exists! Provide unique name.');
                 } else {
-                    saveTaskData(form);
+                    saveToDoData(form);
                 }
-            } else if (form.id == 'modalNewProject') {
-                if (projectsList.find(p => p.title === form[0].value)) {
-                     alert('Project already exists! Provide unique name.');
+            } else if (form.id == 'modalNewFolder') {
+                if (libraryFolders.find(p => p.title === form[0].value)) {
+                    alert('Folder already exists! Provide unique name.');
                 } else {
-                    saveProjectData(form);
+                    saveFolderData(form);
                 }
             }
         }
@@ -105,72 +105,68 @@ confirmEdit.forEach(confirm => {
     confirm.onclick = (e) => {
         let form = e.target.parentElement.parentElement;
         if (form[0].value == '') {
-            alert('No task name provided!');
+            alert('No ToDo name provided!');
         } else {
-            if (form.id == 'editTask') {
-                editTaskData(form);
-            } else if (form.id == 'editProj') {
-                editProjectData(form);
+            if (form.id == 'editToDo') {
+                editToDoData(form);
+            } else if (form.id == 'editFolder') {
+                editFolderData(form);
             }
         }
     }
 })
 
-const editTaskData = (data) => {
+const editToDoData = (data) => {
     let arr = data.className.split('__');
-    let taskIndex = tasksList.findIndex(task => (task.title === arr[0]) && (task.targetProject === arr[1]));
-    tasksList[taskIndex].updateAllData(data[0].value, data[1].value, data[2].value, data[3].value, data[4].value);
+    let todoIndex = libraryToDos.findIndex(todo => (todo.title === arr[0]) && (todo.targetFolder === arr[1]));
+    libraryToDos[todoIndex].updateAllData(data[0].value, data[1].value, data[2].value, data[3].value, data[4].value);
+    displayToDos();
     saveCloseClear();
-    displayTasks();
 }
 
-const editProjectData = (data) => {
-    let projIndex = projectsList.findIndex(proj => proj.title === data.className);
-    projectsList[projIndex].updateTitle = data[0].value;
-    tasksList.forEach(task => {
-        if (task.targetProject === data.className) {
-            task.updateTargetProject = data[0].value;;
+const editFolderData = (data) => {
+    let folderIndex = libraryFolders.findIndex(folder => folder.title === data.className);
+    libraryFolders[folderIndex].updateTitle = data[0].value;
+    libraryToDos.forEach(todo => {
+        if (todo.targetFolder === data.className) {
+            todo.updateTargetFolder = data[0].value;
         }
     })
+    updateCurrentOpenFolder(data[0].value);
+    displayFolders();
+    displayToDos();
     saveCloseClear();
-    // Needed for now
-    displayTasks();
-    //
-    displayProjects();
 }
 
-inboxTasks.addEventListener('click', (e) => {
-    updateCurrentOpenProject(e.target.id);
-    displayTasks();
+inboxToDos.addEventListener('click', (e) => {
+    updateCurrentOpenFolder(e.target.id);
+    displayToDos();
 })
 
-todayTasks.addEventListener('click', (e) => {
-    updateCurrentOpenProject(e.target.id);
-    displayTasks();
+todayToDos.addEventListener('click', (e) => {
+    updateCurrentOpenFolder(e.target.id);
+    displayToDos();
 })
 
-weekTasks.addEventListener('click', (e) => {
-    updateCurrentOpenProject(e.target.id);
-    displayTasks();
+weekToDos.addEventListener('click', (e) => {
+    updateCurrentOpenFolder(e.target.id);
+    displayToDos();
 })
 
-projectsDropdown.onclick = () => {
-    projectsContainer.classList.toggle('show');
+dropdownFolders.onclick = () => {
+    containerFolders.classList.toggle('show');
 }
 
-// 1...2,,,3   4---5
-// 2010-13-35
-// 2022-01-01
-const saveTaskData = (data) => {
+const saveToDoData = (data) => {
     let title = data[0].value;
     let description = data[1].value;
     let dueDate = data[2].value;
     let priority = data[3].value;
-    let targetProject = data[4].value;
+    let targetFolder = data[4].value;
     if (checkDateFormat(dueDate)) {
-        new Task(title, description, dueDate, priority, targetProject);
+        new ToDo(title, description, dueDate, priority, targetFolder);
+        displayToDos();
         saveCloseClear();
-        displayTasks();
     }
 }
 
@@ -197,56 +193,56 @@ const checkDateFormat = (date) => {
     }
 }
 
-const saveProjectData = (data) => {
-    new Project(data[0].value);
-    saveCloseClear();
+const saveFolderData = (data) => {
+    new Folder(data[0].value);
     updateSelectList();
-    displayProjects();
+    displayFolders();
+    saveCloseClear();
 }
 
-const displayProjects = () => {
-    projectsContainer.innerHTML = '';
-    projectsList.forEach(item => {
-        projectsContainer.append(createProjectContainer(item));
+const displayFolders = () => {
+    containerFolders.innerHTML = '';
+    libraryFolders.forEach(item => {
+        containerFolders.append(createFolderContainer(item));
     })
 }
 
-const displayTasks = () => {
-    tasksContainer.innerHTML = '';
+const displayToDos = () => {
+    containerToDos.innerHTML = '';
     let h3 = document.createElement('h3');
-    h3.textContent = currentOpenProject;
-    tasksContainer.append(h3);
+    h3.textContent = currentOpenFolder;
+    containerToDos.append(h3);
 
-    let filteredList = filterTaskList();
-    filteredList.forEach(task => {
-        tasksContainer.append(createTaskContainer(task));
+    let filteredList = filterToDoList();
+    filteredList.forEach(todo => {
+        containerToDos.append(createToDoContainer(todo));
     })
 }
 
-let currentOpenProject = tasksContainer.className;
+let currentOpenFolder = containerToDos.className;
 
-const updateCurrentOpenProject = (id) => {
-    // tasksContainer.className = id;
-    currentOpenProject = id;
+const updateCurrentOpenFolder = (id) => {
+    containerToDos.className = id;
+    currentOpenFolder = id;
 }
 
-const filterTaskList = () => {
+const filterToDoList = () => {
     let today = new Date();
     let dateFormat = new Date(today.getTime() - (today.getTimezoneOffset() * 60000))
         .toISOString()
         .split("T")[0];
     let newList = [];
-    if (currentOpenProject === 'Inbox') {
-        return tasksList;
-    } else if (currentOpenProject === 'Today') {
-        newList = tasksList.filter(item => item.dueDate == dateFormat);
+    if (currentOpenFolder === 'Inbox') {
+        return libraryToDos;
+    } else if (currentOpenFolder === 'Today') {
+        newList = libraryToDos.filter(item => item.dueDate == dateFormat);
         return newList;
-    // } else if (currentOpenProject === 'Week') {
-    //     newList = tasksList.filter(item => item.dueDate >= dateFormat);
+    // } else if (currentOpenFolder === 'Week') {
+    //     newList = libraryToDos.filter(item => item.dueDate >= dateFormat);
     //     console.log(newList);
     //     return newList;
     } else {
-        newList = tasksList.filter(item => item.targetProject === currentOpenProject);
+        newList = libraryToDos.filter(item => item.targetFolder === currentOpenFolder);
         return newList;
     }
 }
@@ -257,17 +253,17 @@ const createPara = (text) => {
     return para;
 }
 
-const createTaskContainer = (item) => {
+const createToDoContainer = (item) => {
     let div = document.createElement('div');
-    div.id = 'task__' + item.title + '__' + item.targetProject;
-    div.classList.add('task', 'priority'+item.priority);
+    div.id = 'todo__' + item.title + '__' + item.targetFolder;
+    div.classList.add('todo', 'priority'+item.priority);
 
     let cont = document.createElement('div');
     cont.append(createPara(item.title))
     cont.append(createPara(item.description))
     cont.append(createPara(item.dueDate))
     cont.append(createPara(item.priority))
-    cont.append(createPara(item.targetProject))
+    cont.append(createPara(item.targetFolder))
 
     div.append(cont);
     div.append(createDelBtn());
@@ -276,14 +272,14 @@ const createTaskContainer = (item) => {
     return div;
 }
 
-const createProjectContainer = (item) => {
+const createFolderContainer = (item) => {
     let div = document.createElement('div');
-    div.id = 'project__' + item.title;
+    div.id = 'folder__' + item.title;
     div.textContent = item.title;
-    div.classList.add('project');
+    div.classList.add('folder');
     div.addEventListener('click', () => {
-        updateCurrentOpenProject(item.title);
-        displayTasks();
+        updateCurrentOpenFolder(item.title);
+        displayToDos();
     })
     div.append(createDelBtn());
     div.append(createEditBtn());
@@ -299,7 +295,7 @@ const createDelBtn = () => {
     deleteBtn.alt = 'Delete';
     deleteBtn.addEventListener('click', (e) => {
         deleteItem(e.target.parentElement);
-        saveAllLib();
+        saveAllLibraries();
     })
     return deleteBtn;
 }
@@ -312,7 +308,7 @@ const createEditBtn = () => {
     editBtn.alt = 'Edit';
     editBtn.addEventListener('click', (e) => {
         editItem(e.target.parentElement);
-        saveAllLib();
+        saveAllLibraries();
     })
     return editBtn;
 }
@@ -324,35 +320,35 @@ const clearForms = () => {
 }
 
 const saveCloseClear = () => {
-    saveAllLib();
+    saveAllLibraries();
     modalClose();
     clearForms();
 }
 
 const deleteItem = (el) => {
     let arr = el.id.split('__');
-    if (arr[0] == 'task') {
-        let taskIndex = tasksList.findIndex(task => (task.title === arr[1]) && (task.targetProject === arr[2]));
-        tasksList.splice(taskIndex, 1);
-    } else if (arr[0] == 'project') {
-        let projIndex = projectsList.findIndex(proj => proj.title === arr[1])
-        projectsList.splice(projIndex, 1);
+    if (arr[0] == 'todo') {
+        let todoIndex = libraryToDos.findIndex(todo => (todo.title === arr[1]) && (todo.targetFolder === arr[2]));
+        libraryToDos.splice(todoIndex, 1);
+    } else if (arr[0] == 'folder') {
+        let folderIndex = libraryFolders.findIndex(folder => folder.title === arr[1])
+        libraryFolders.splice(folderIndex, 1);
     }
     el.remove();
 }
 
 const editItem = (el) => {
     let arr = el.id.split('__');
-    if (arr[0] == 'task') {
-        let findTask = tasksList.find(task => (task.title === arr[1]) && (task.targetProject === arr[2]));
-        loadEditTask(findTask);
-        modalEditTask.style.display = 'flex';
-        editTask.className = arr[1] + '__' + arr[2];
-    } else if (arr[0] == 'project') {
-        let findProj = projectsList.find(proj => proj.title === arr[1]);
-        loadEditProject(findProj);
-        modalEditProj.style.display = 'flex';
-        editProj.className = arr[1];
+    if (arr[0] == 'todo') {
+        let findToDO = libraryToDos.find(todo => (todo.title === arr[1]) && (todo.targetFolder === arr[2]));
+        loadEditToDo(findToDO);
+        modalEditToDo.style.display = 'flex';
+        editToDo.className = arr[1] + '__' + arr[2];
+    } else if (arr[0] == 'folder') {
+        let findFolder = libraryFolders.find(folder => folder.title === arr[1]);
+        loadEditFolder(findFolder);
+        modalEditFolder.style.display = 'flex';
+        editFolder.className = arr[1];
     }
 }
 
@@ -363,47 +359,47 @@ const updateSelectList = () => {
         inbox.value = 'Inbox';
         inbox.textContent = 'Inbox';
         select.append(inbox);
-        projectsList.forEach(proj => {
+        libraryFolders.forEach(folder => {
             let option = document.createElement('option');
-            option.value = proj.title;
-            option.textContent = proj.title;
+            option.value = folder.title;
+            option.textContent = folder.title;
             select.append(option);
         })
     })
 }
 
-const loadEditTask = (item) => {
-    editTask[0].value = item.title;
-    editTask[1].value = item.description;
-    editTask[2].value = item.dueDate;
-    editTask[3].value = item.priority;
+const loadEditToDo = (item) => {
+    editToDo[0].value = item.title;
+    editToDo[1].value = item.description;
+    editToDo[2].value = item.dueDate;
+    editToDo[3].value = item.priority;
     updateSelectList();
 }
 
-const loadEditProject = (item) => {
-    editProj[0].value = item.title;
+const loadEditFolder = (item) => {
+    editFolder[0].value = item.title;
 }
 
-class Project {
+class Folder {
     constructor(title) {
         this.title = title;
-        projectsList.push(this);
-        saveProjLib();
+        libraryFolders.push(this);
+        saveLibraryFolders();
     }
     set updateTitle(updateTitle) {
         this.title = updateTitle;
     }
 }
 
-class Task {
-    constructor(title, description, dueDate, priority, targetProject) {
+class ToDo {
+    constructor(title, description, dueDate, priority, targetFolder) {
         this.title = title;
         this.description = description;
         this.priority = priority;
         this.dueDate = dueDate;
-        this.targetProject = targetProject;
-        tasksList.push(this);
-        saveTaskLib();
+        this.targetFolder = targetFolder;
+        libraryToDos.push(this);
+        saveLibraryToDos();
     }
     set updateTitle(updateTitle) {
         this.title = updateTitle;
@@ -417,56 +413,56 @@ class Task {
     set updateDueDate(updateDueDate) {
         this.dueDate = updateDueDate;
     }
-    set updateTargetProject(updateTargetProject) {
-        this.targetProject = updateTargetProject;
+    set updateTargetFolder(updateTargetFolder) {
+        this.targetFolder = updateTargetFolder;
     }
     updateAllData(data0, data1, data2, data3, data4) {
         this.updateTitle = data0;
         this.updateDescription = data1;
         this.updateDueDate = data2;
         this.updatePriority = data3;
-        this.targetProject = data4;
+        this.targetFolder = data4;
     }
 }
 
-const saveAllLib = () => {
-    saveProjLib();
-    saveTaskLib();
+const saveAllLibraries = () => {
+    saveLibraryToDos();
+    saveLibraryFolders();
 }
 
-const saveTaskLib = () => {
-    localStorage.setItem('tasksList', JSON.stringify(tasksList));
+const saveLibraryToDos = () => {
+    localStorage.setItem('libraryToDos', JSON.stringify(libraryToDos));
 }
 
-const saveProjLib = () => {
-    localStorage.setItem('projectsList', JSON.stringify(projectsList));
+const saveLibraryFolders = () => {
+    localStorage.setItem('libraryFolders', JSON.stringify(libraryFolders));
 }
 
-const tasksList = JSON.parse(localStorage.getItem('tasksList')) || [];
-const projectsList = JSON.parse(localStorage.getItem('projectsList')) || [];
+const libraryToDos = JSON.parse(localStorage.getItem('libraryToDos')) || [];
+const libraryFolders = JSON.parse(localStorage.getItem('libraryFolders')) || [];
 
 const loadDefaults = () => {
-    let new123test = new Project('Kitchen');
-    let new234test = new Project('House');
-    let new345test = new Project('Gym');
+    let new123test = new Folder('Kitchen');
+    let new234test = new Folder('House');
+    let new345test = new Folder('Gym');
 
-    let new666 = new Task('Jake Mail', 'Send Email to Jake about upcoming project', '2025-01-01', 'High', 'Inbox');
-    let new667 = new Task('Basement', 'Clean trash from basement', '2027-02-02', 'Medium', 'House');
-    let new778 = new Task('Lightbulb', 'Replace kitchen lightbulb', '2021-06-08', 'Low', 'Kitchen');
-    let new889 = new Task('Carpet', 'Clean the carpet', new Date().toISOString().split("T")[0], 'Low', 'House');
-    let new989 = new Task('Gym', 'Renew gym membership', new Date().toISOString().split("T")[0], 'Medium', 'Gym');
+    let new666 = new ToDo('Jake Mail', 'Send Email to Jake about upcoming project', '2025-01-01', 'High', 'Inbox');
+    let new667 = new ToDo('Basement', 'Clean trash from basement', '2027-02-02', 'Medium', 'House');
+    let new778 = new ToDo('Lightbulb', 'Replace kitchen lightbulb', '2021-06-08', 'Low', 'Kitchen');
+    let new889 = new ToDo('Carpet', 'Clean the carpet', new Date().toISOString().split("T")[0], 'Low', 'House');
+    let new989 = new ToDo('Gym', 'Renew gym membership', new Date().toISOString().split("T")[0], 'Medium', 'Gym');
 }
 
-if ((!localStorage.getItem('tasksList')) && (!localStorage.getItem('projectsList'))) {
+if ((!localStorage.getItem('libraryToDos')) && (!localStorage.getItem('libraryFolders'))) {
     loadDefaults();
 }
 
-// Should I populate with defaults if user decides to delete all projects and tasks?
-if ((tasksList.length === 0) && (projectsList.length === 0)) {
+// Should I populate with defaults if user decides to delete all folder and todos?
+if ((libraryToDos.length === 0) && (libraryFolders.length === 0)) {
     loadDefaults();
 }
 
-displayProjects();
-displayTasks();
+displayFolders();
+displayToDos();
 clearForms();
 updateSelectList();
