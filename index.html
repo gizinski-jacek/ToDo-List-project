@@ -17,12 +17,12 @@
                 <div id="Inbox">Inbox</div>
                 <div id="Today">Today</div>
                 <div id="Week">Week</div>
-                <div id="projectsDropdown" type="button">Projects</div>
-                <span id="projectsContainer">
+                <div id="dropdownFolders" type="button">Folders</div>
+                <span id="containerFolders">
 
                 </span>
             </div>
-            <div id="tasksContainer" class='Inbox'>
+            <div id="containerToDos" class='Inbox'>
 
             </div>
         </div>
@@ -34,11 +34,11 @@
                 </div>
                 <div class="modalBody">
                     <div id="modalNewMenu">
-                        <span id='newTaskBtn'>Task</span>
-                        <span id='newProjectBtn'>Project</span>
+                        <span id='newToDoBtn'>ToDo</span>
+                        <span id='newFolderBtn'>Folder</span>
                     </div>
-                    <form id='modalNewTask'>
-                        <input type='text' placeholder='Task Name'>
+                    <form id='modalNewToDo'>
+                        <input type='text' placeholder='ToDo Name'>
                         <textarea placeholder='Description'></textarea>
                         <input type='text' placeholder='Due Date: YYYY-MM-DD'>
                         <select>
@@ -49,41 +49,41 @@
                         <select class='selectList'>
                         
                         </select>
-                        <div>
-                            <button class="confirm" type='button'>Confirm</button>
+                        <div class='controls'>
+                            <button class="confirm" type='button'>Create ToDo</button>
                             <button class="cancel" type='button'>Cancel</button>
                         </div>
                     </form>
-                    <form id='modalNewProject'>
-                        <input type='text' placeholder='Project Name'>
-                        <div>
-                            <button class="confirm" type='button'>Confirm</button>
+                    <form id='modalNewFolder'>
+                        <input type='text' placeholder='Folder Name'>
+                        <div class='controls'>
+                            <button class="confirm" type='button'>Create Folder</button>
                             <button class="cancel" type='button'>Cancel</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        <div id='modalEditTask'>
+        <div id='modalEditToDo'>
             <div class='modalContainer'>
                 <div id='modalHead'>
-                    <h2>Edit Task...</h2>
+                    <h2>Edit ToDo...</h2>
                     <span class='button-X'>X</span>
                 </div>
                 <div class="modalBody">
-                    <form id='editTask'>
-                        <input type='text'>
-                        <textarea></textarea>
+                    <form id='editToDo'>
+                        <input type='text' placeholder='ToDo Name'>
+                        <textarea placeholder='Description'></textarea>
                         <input type='text' placeholder='Due Date: YYYY-MM-DD'>
                         <select>
-                            <option value='high' selected>High</option>
-                            <option value='medium'>Medium</option>
-                            <option value='low'>Low</option>
+                            <option value='High'>High</option>
+                            <option value='Medium'>Medium</option>
+                            <option value='Low'>Low</option>
                         </select>
                         <select class='selectList'>
                             
                         </select>
-                        <div>
+                        <div class='controls'>
                             <button class="confirmEdit" type='button'>Confirm</button>
                             <button class="cancel" type='button'>Cancel</button>
                         </div>
@@ -91,16 +91,16 @@
                 </div>
             </div>
         </div>
-        <div id='modalEditProj'>
+        <div id='modalEditFolder'>
             <div class='modalContainer'>
                 <div id='modalHead'>
-                    <h2>Edit Project...</h2>
+                    <h2>Edit Folder...</h2>
                     <span class='button-X'>X</span>
                 </div>
                 <div class="modalBody">
-                    <form id='editProj'>
-                        <input type='text'>
-                        <div>
+                    <form id='editFolder'>
+                        <input type='text' placeholder='Folder Name'>
+                        <div class='controls'>
                             <button class="confirmEdit" type='button'>Confirm</button>
                             <button class="cancel" type='button'>Cancel</button>
                         </div>
