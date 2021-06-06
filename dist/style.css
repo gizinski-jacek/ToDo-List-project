@@ -72,11 +72,11 @@ body {
 
 .fewDetails p {
     display: flex;
-    padding-right: 20px;
+    margin-right: 20px;
 }
 
 .moreDetails {
-    padding: 10px;
+    margin: 10px;
     justify-content: space-between;
 }
 
@@ -89,6 +89,7 @@ input[type=image] {
 h1 {
     font-size: 2.5rem;
     margin: auto 20px;
+    font-weight: 600;
 }
 
 #newItem {
@@ -107,6 +108,10 @@ h1 {
 
 #newItem:hover {
     box-shadow: 0 0 10px rgb(0, 0, 0);
+}
+
+p {
+    line-height: 1.5rem;
 }
 
 #containerToDos {
@@ -162,6 +167,10 @@ h1 {
 
 .modalBody {
     display: flex;
+}
+
+#modalNewToDo, #modalNewFolder {
+    height: 550px;
 }
 
 #modalNewPage, #modalEditFolder, #modalEditToDo {
@@ -224,15 +233,15 @@ form {
     height: 100%;
     width: 100%;
     padding-top: 10px;
-    min-width: 550px;
-    min-height: 450px;
+    min-height: 200px;
+    min-width: 200px;
     background: rgb(200, 200, 200);
     box-sizing: border-box;
 }
 
 form * {
     margin: 10px;
-    padding: 10px;
+    padding: 5px;
     width: 300px;
     box-sizing: border-box;
 }
@@ -241,7 +250,6 @@ form * {
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-top: auto;
 }
 
 h3 {
@@ -256,6 +264,11 @@ h3 {
 }
 
 textarea {
-    height: 80px;
+    height: 85px;
     resize: none;
+}
+
+label {
+    margin: 10px 0 0 10px;
+    padding: 0;
 }
