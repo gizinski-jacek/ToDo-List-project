@@ -247,6 +247,8 @@ const filterToDoList = () => {
     }
 }
 
+
+
 const createPara = (text) => {
     let para = document.createElement('p');
     para.textContent = text;
@@ -254,37 +256,56 @@ const createPara = (text) => {
 }
 
 const createToDoContainer = (item) => {
-    let div = document.createElement('div');
-    div.id = 'todo__' + item.title + '__' + item.targetFolder;
-    div.classList.add('todo', 'priority'+item.priority);
+    let main = document.createElement('div');
+    main.id = 'todo__' + item.title + '__' + item.targetFolder;
+    main.classList.add('todo', 'priority'+item.priority);
+    main.addEventListener('click', (e) => {
+        e.currentTarget.querySelectorAll('.moreDetails')[0].classList.toggle('show');
+    })
+    
+    let cont1 = document.createElement('div');
+    cont1.classList.add('fewDetails');
 
-    let cont = document.createElement('div');
-    cont.append(createPara(item.title))
-    cont.append(createPara(item.description))
-    cont.append(createPara(item.dueDate))
-    cont.append(createPara(item.priority))
-    cont.append(createPara(item.targetFolder))
+    let sub1 = document.createElement('div');
+    sub1.append(createPara(item.dueDate));
+    sub1.append(createPara(item.title));
 
-    div.append(cont);
-    div.append(createDelBtn());
-    div.append(createEditBtn());
+    let sub2 = document.createElement('div');
+    sub2.classList.add('controls');
+    sub2.append(createEditBtn());
+    sub2.append(createDelBtn());
 
-    return div;
+    cont1.append(sub1);
+    cont1.append(sub2);
+    
+    let cont2 = document.createElement('div');
+    cont2.classList.add('moreDetails');
+    cont2.append(createPara(item.description));
+    cont2.append(createPara('Folder: ' + item.targetFolder));
+
+    main.append(cont1);
+    main.append(cont2);
+
+    return main;
 }
 
 const createFolderContainer = (item) => {
-    let div = document.createElement('div');
-    div.id = 'folder__' + item.title;
-    div.textContent = item.title;
-    div.classList.add('folder');
-    div.addEventListener('click', () => {
+    let main = document.createElement('div');
+    main.id = 'folder__' + item.title;
+    main.textContent = item.title;
+    main.classList.add('folder');
+    main.addEventListener('click', () => {
         updateCurrentOpenFolder(item.title);
         displayToDos();
     })
-    div.append(createDelBtn());
-    div.append(createEditBtn());
-
-    return div;
+    let sub = document.createElement('div');
+    sub.classList.add('controls');
+    sub.append(createEditBtn());
+    sub.append(createDelBtn());
+    
+    main.append(sub);
+    
+    return main;
 }
 
 const createDelBtn = () => {
@@ -294,8 +315,9 @@ const createDelBtn = () => {
     deleteBtn.src = 'imgs/delete-64.png';
     deleteBtn.alt = 'Delete';
     deleteBtn.addEventListener('click', (e) => {
-        deleteItem(e.target.parentElement);
+        deleteItem(e.target.closest('.folder, .todo'));
         saveAllLibraries();
+        e.stopPropagation();
     })
     return deleteBtn;
 }
@@ -307,8 +329,9 @@ const createEditBtn = () => {
     editBtn.src = 'imgs/edit-64.png';
     editBtn.alt = 'Edit';
     editBtn.addEventListener('click', (e) => {
-        editItem(e.target.parentElement);
+        editItem(e.target.closest('.folder, .todo'));
         saveAllLibraries();
+        e.stopPropagation();
     })
     return editBtn;
 }
