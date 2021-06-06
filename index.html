@@ -14,10 +14,10 @@
         </div>
         <div class="main">
             <div class="menu">
-                <div id="Inbox">Inbox</div>
-                <div id="Today">Today</div>
-                <div id="Week">Week</div>
-                <div id="dropdownFolders" type="button">Folders</div>
+                <div id="Inbox" class='folder'>Inbox</div>
+                <div id="Today" class='folder'>Today</div>
+                <div id="Week" class='folder'>Week</div>
+                <div id="dropdownFolders" class='folder' type="button">Folders</div>
                 <span id="containerFolders">
 
                 </span>
@@ -49,14 +49,14 @@
                         <select class='selectList'>
                         
                         </select>
-                        <div class='controls'>
+                        <div class='modalControls'>
                             <button class="confirm" type='button'>Create ToDo</button>
                             <button class="cancel" type='button'>Cancel</button>
                         </div>
                     </form>
                     <form id='modalNewFolder'>
                         <input type='text' placeholder='Folder Name'>
-                        <div class='controls'>
+                        <div class='modalControls'>
                             <button class="confirm" type='button'>Create Folder</button>
                             <button class="cancel" type='button'>Cancel</button>
                         </div>
@@ -83,7 +83,7 @@
                         <select class='selectList'>
                             
                         </select>
-                        <div class='controls'>
+                        <div class='modalControls'>
                             <button class="confirmEdit" type='button'>Confirm</button>
                             <button class="cancel" type='button'>Cancel</button>
                         </div>
@@ -100,7 +100,7 @@
                 <div class="modalBody">
                     <form id='editFolder'>
                         <input type='text' placeholder='Folder Name'>
-                        <div class='controls'>
+                        <div class='modalControls'>
                             <button class="confirmEdit" type='button'>Confirm</button>
                             <button class="cancel" type='button'>Cancel</button>
                         </div>
