@@ -83,6 +83,8 @@ confirms.forEach(confirm => {
         let form = e.target.parentElement.parentElement;
         if (form[0].value == '') {
             alert('No ToDo name provided!');
+        } else if (form[2].value == '') {
+            alert('No Date provided!');
         } else {
             if (form.id == 'modalNewToDo') {
                 if (libraryToDos.find(p => p.title === form[0].value)) {
@@ -163,35 +165,33 @@ const saveToDoData = (data) => {
     let dueDate = data[2].value;
     let priority = data[3].value;
     let targetFolder = data[4].value;
-    if (checkDateFormat(dueDate)) {
-        new ToDo(title, description, dueDate, priority, targetFolder);
-        displayToDos();
-        saveCloseClear();
-    }
+    new ToDo(title, description, dueDate, priority, targetFolder);
+    displayToDos();
+    saveCloseClear();
 }
 
-const checkDateFormat = (date) => {
-    let dateArray = date.split(/[\s\,\.\-]+/);
-    let year = dateArray[0];
-    let month = dateArray[1].padStart(2, 0);
-    let day = dateArray[2].padStart(2, 0);
-    let today = new Date();
-    if (year == undefined || month == undefined || day == undefined) {
-        alert('Wrong date format');
-        return false;
-    } else if ((year < today.getFullYear()) || (year > 9999)) {
-        alert('Wrong year');
-        return false;
-    } else if ((month < 1) || (month > 12)) {
-        alert('Wrong month');
-        return false;
-    } else if ((day < 1) || (day > new Date(year, month, 0).getDate())) {
-        alert('Wrong day');
-        return false;
-    } else {
-        return true;
-    }
-}
+// const checkDateFormat = (date) => {
+//     let dateArray = date.split(/[\s\-]+/);
+//     let year = dateArray[0];
+//     let month = dateArray[1].padStart(2, 0);
+//     let day = dateArray[2].padStart(2, 0);
+//     let today = new Date();
+//     if (year == undefined || month == undefined || day == undefined) {
+//         alert('Wrong date format');
+//         return false;
+//     } else if ((year < today.getFullYear()) || (year > 9999)) {
+//         alert('Wrong year');
+//         return false;
+//     } else if ((month < 1) || (month > 12)) {
+//         alert('Wrong month');
+//         return false;
+//     } else if ((day < 1) || (day > new Date(year, month, 0).getDate())) {
+//         alert('Wrong day');
+//         return false;
+//     } else {
+//         return true;
+//     }
+// }
 
 const saveFolderData = (data) => {
     new Folder(data[0].value);
