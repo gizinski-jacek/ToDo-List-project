@@ -9,7 +9,7 @@
 <body>
     <div id="content">
         <div id='header'>
-            <h1>ToDo</h1>
+            <h1>Your ToDo's</h1>
             <span id='newItem'>+</span>
         </div>
         <div class="main">
@@ -38,14 +38,19 @@
                         <span id='newFolderBtn'>Folder</span>
                     </div>
                     <form id='modalNewToDo'>
-                        <input type='text' placeholder='ToDo Name'>
-                        <textarea placeholder='Description'></textarea>
-                        <input type='text' placeholder='Due Date: YYYY-MM-DD'>
+                        <label for='newToDoTitle'>ToDo Title</label>
+                        <input id='newToDoTitle' type='text' placeholder='ToDo Title'>
+                        <label for='newToDoDescription'>Description</label>
+                        <textarea id='newToDoDescription' placeholder='Description'></textarea>
+                        <label for='newDueDate'>Due Date</label>
+                        <input id='newDueDate' type='date' min='2021-01-01' max='2200-12-31'>
+                        <label>Priority</label>
                         <select>
                             <option value='High' selected>High</option>
                             <option value='Medium'>Medium</option>
                             <option value='Low'>Low</option>
                         </select>
+                        <label>Folder</label>
                         <select class='selectList'>
                         
                         </select>
@@ -55,7 +60,8 @@
                         </div>
                     </form>
                     <form id='modalNewFolder'>
-                        <input type='text' placeholder='Folder Name'>
+                        <label for='newFolderName'>Folder Title</label>
+                        <input id='newFolderName' type='text' placeholder='Folder Title'>
                         <div class='modalControls'>
                             <button class="confirm" type='button'>Create Folder</button>
                             <button class="cancel" type='button'>Cancel</button>
@@ -72,14 +78,19 @@
                 </div>
                 <div class="modalBody">
                     <form id='editToDo'>
-                        <input type='text' placeholder='ToDo Name'>
-                        <textarea placeholder='Description'></textarea>
-                        <input type='text' placeholder='Due Date: YYYY-MM-DD'>
+                        <label for='editToDoTitle'>ToDo Title</label>
+                        <input id='editToDoTitle' type='text' placeholder='ToDo Title'>
+                        <label for='editToDoDescription'>Description</label>
+                        <textarea id='editToDoDescription' placeholder='Description'></textarea>
+                        <label for='editDueDate'>Due Date</label>
+                        <input id='editDueDate' type='date' min='2021-01-01' max='2200-12-31'>
+                        <label>Priority</label>
                         <select>
                             <option value='High'>High</option>
                             <option value='Medium'>Medium</option>
                             <option value='Low'>Low</option>
                         </select>
+                        <label>Folder</label>
                         <select class='selectList'>
                             
                         </select>
@@ -99,7 +110,8 @@
                 </div>
                 <div class="modalBody">
                     <form id='editFolder'>
-                        <input type='text' placeholder='Folder Name'>
+                        <label for='editFolderName'>Folder Title</label>
+                        <input id='editFolderName' type='text' placeholder='Folder Name'>
                         <div class='modalControls'>
                             <button class="confirmEdit" type='button'>Confirm</button>
                             <button class="cancel" type='button'>Cancel</button>
