@@ -34,7 +34,7 @@ body {
     margin: 5px;
 }
 
-.menu div {
+.folder {
     text-align: left;
     background-color: rgba(0, 255, 255, 0.5);
     border: 1px solid rgba(0, 100, 100, 0.2);
@@ -44,19 +44,46 @@ body {
     padding: 10px;
 }
 
-.menu div:hover {
+.folder:hover {
     filter: brightness(90%);
 }
 
-input[type=image] {
-    height: 20px;
-    width: 20px;
-    float: right;
+.todo {
+    display: flex;
+    margin: 20px;
+    border: 1px solid black;
+    flex-direction: column;
 }
 
-.todo {
-    margin: 20px 20px;
+.todo:hover {
+    filter: brightness(90%);
+}
+
+.fewDetails {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 3px solid black;
     padding: 10px;
+}
+
+.fewDetails div {
+    display: flex;
+}
+
+.fewDetails p {
+    display: flex;
+    padding-right: 20px;
+}
+
+.moreDetails {
+    padding: 10px;
+    justify-content: space-between;
+}
+
+input[type=image] {
+    margin-left: 15px;
+    height: 1rem;
+    width: 1rem;
 }
 
 h1 {
@@ -104,10 +131,21 @@ h1 {
 #containerFolders {
     display: none;
     flex-direction: column;
+
+}
+
+.folder {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .show {
     display: flex !important;
+}
+
+.moreDetails {
+    display: none;
 }
 
 #footer {
@@ -199,7 +237,7 @@ form * {
     box-sizing: border-box;
 }
 
-.controls {
+.modalControls {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -213,7 +251,7 @@ h3 {
     border-bottom: 2px solid black;
 }
 
-.controls button {
+.modalControls button {
     width: 150px !important;
 }
 
