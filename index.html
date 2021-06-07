@@ -22,15 +22,15 @@
 
                 </span>
             </div>
-            <div id="containerToDos" class='Inbox'>
+            <div id="containerToDos">
 
             </div>
         </div>
-        <div id='modalNewPage'>
+        <div id='modalNew'>
             <div class='modalContainer'>
                 <div id='modalHead'>
                     <h2>Create new...</h2>
-                    <span class='button-X'>X</span>
+                    <span class='button-X'>x</span>
                 </div>
                 <div class="modalBody">
                     <div id="modalNewMenu">
@@ -45,26 +45,26 @@
                         <label for='newDueDate'>Due Date</label>
                         <input id='newDueDate' type='date' min='2021-01-01' max='2200-12-31'>
                         <label>Priority</label>
-                        <select>
+                        <select id='newPriority'>
                             <option value='High' selected>High</option>
                             <option value='Medium'>Medium</option>
                             <option value='Low'>Low</option>
                         </select>
                         <label>Folder</label>
-                        <select class='selectList'>
+                        <select id='newTargetFolder' class='selectList'>
                         
                         </select>
                         <div class='modalControls'>
-                            <button class="confirm" type='button'>Create ToDo</button>
-                            <button class="cancel" type='button'>Cancel</button>
+                            <button class='confirmNew' type='button'>Create ToDo</button>
+                            <button class='cancel' type='button'>Cancel</button>
                         </div>
                     </form>
                     <form id='modalNewFolder'>
-                        <label for='newFolderName'>Folder Title</label>
-                        <input id='newFolderName' type='text' placeholder='Folder Title'>
+                        <label for='newFolderTitle'>Folder Title</label>
+                        <input id='newFolderTitle' type='text' placeholder='Folder Title'>
                         <div class='modalControls'>
-                            <button class="confirm" type='button'>Create Folder</button>
-                            <button class="cancel" type='button'>Cancel</button>
+                            <button class='confirmNew' type='button'>Create Folder</button>
+                            <button class='cancel' type='button'>Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -74,7 +74,7 @@
             <div class='modalContainer'>
                 <div id='modalHead'>
                     <h2>Edit ToDo...</h2>
-                    <span class='button-X'>X</span>
+                    <span class='button-X'>x</span>
                 </div>
                 <div class="modalBody">
                     <form id='editToDo'>
@@ -85,13 +85,13 @@
                         <label for='editDueDate'>Due Date</label>
                         <input id='editDueDate' type='date' min='2021-01-01' max='2200-12-31'>
                         <label>Priority</label>
-                        <select>
+                        <select id='editPriority'>
                             <option value='High'>High</option>
                             <option value='Medium'>Medium</option>
                             <option value='Low'>Low</option>
                         </select>
                         <label>Folder</label>
-                        <select class='selectList'>
+                        <select id='editTargetFolder' class='selectList'>
                             
                         </select>
                         <div class='modalControls'>
@@ -106,12 +106,12 @@
             <div class='modalContainer'>
                 <div id='modalHead'>
                     <h2>Edit Folder...</h2>
-                    <span class='button-X'>X</span>
+                    <span class='button-X'>x</span>
                 </div>
                 <div class="modalBody">
                     <form id='editFolder'>
-                        <label for='editFolderName'>Folder Title</label>
-                        <input id='editFolderName' type='text' placeholder='Folder Name'>
+                        <label for='editFolderTitle'>Folder Title</label>
+                        <input id='editFolderTitle' type='text' placeholder='Folder Name'>
                         <div class='modalControls'>
                             <button class="confirmEdit" type='button'>Confirm</button>
                             <button class="cancel" type='button'>Cancel</button>
