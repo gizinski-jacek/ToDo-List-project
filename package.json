@@ -19,5 +19,8 @@
   "devDependencies": {
     "webpack": "^5.37.1",
     "webpack-cli": "^4.7.0"
+  },
+  "dependencies": {
+    "luxon": "^1.27.0"
   }
 }
