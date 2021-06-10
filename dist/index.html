@@ -2,27 +2,27 @@
 <html>
 <head>
     <title>ToDo List</title>
-    <meta charset="UTF-8" />
-    <link href="reset.css" rel="stylesheet" type="text/css">
-    <link href="style.css" rel="stylesheet" type="text/css">
+    <meta charset='UTF-8' />
+    <link href='reset.css' rel='stylesheet' type='text/css'>
+    <link href='style.css' rel='stylesheet' type='text/css'>
 </head>
 <body>
-    <div id="content">
+    <div id='content'>
         <div id='header'>
             <h1>Your ToDo's</h1>
             <span id='newItem'>+</span>
         </div>
-        <div class="main">
-            <div class="menu">
-                <div id="Inbox" class='folder'>Inbox</div>
-                <div id="Today" class='folder'>Today</div>
-                <div id="Week" class='folder'>Week</div>
-                <div id="dropdownFolders" class='folder' type="button">Folders</div>
-                <span id="containerFolders">
+        <div class='main'>
+            <div class='menu'>
+                <div id='Inbox' class='folder'>Inbox</div>
+                <div id='Today' class='folder'>Today</div>
+                <div id='Week' class='folder'>Week</div>
+                <div id='dropdownFolders' class='folder'>Folders</div>
+                <span id='containerFolders'>
 
                 </span>
             </div>
-            <div id="containerToDos">
+            <div id='containerToDos'>
 
             </div>
         </div>
@@ -32,8 +32,8 @@
                     <h2>Create new...</h2>
                     <span class='button-X'>x</span>
                 </div>
-                <div class="modalBody">
-                    <div id="modalNewMenu">
+                <div class='modalBody'>
+                    <div id='modalNewMenu'>
                         <span id='newToDoBtn'>ToDo</span>
                         <span id='newFolderBtn'>Folder</span>
                     </div>
@@ -76,7 +76,7 @@
                     <h2>Edit ToDo...</h2>
                     <span class='button-X'>x</span>
                 </div>
-                <div class="modalBody">
+                <div class='modalBody'>
                     <form id='editToDo'>
                         <label for='editToDoTitle'>ToDo Title</label>
                         <input id='editToDoTitle' type='text' placeholder='ToDo Title'>
@@ -95,8 +95,8 @@
                             
                         </select>
                         <div class='modalControls'>
-                            <button class="confirmEdit" type='button'>Confirm</button>
-                            <button class="cancel" type='button'>Cancel</button>
+                            <button class='confirmEdit' type='button'>Confirm</button>
+                            <button class='cancel' type='button'>Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -108,20 +108,20 @@
                     <h2>Edit Folder...</h2>
                     <span class='button-X'>x</span>
                 </div>
-                <div class="modalBody">
+                <div class='modalBody'>
                     <form id='editFolder'>
                         <label for='editFolderTitle'>Folder Title</label>
                         <input id='editFolderTitle' type='text' placeholder='Folder Name'>
                         <div class='modalControls'>
-                            <button class="confirmEdit" type='button'>Confirm</button>
-                            <button class="cancel" type='button'>Cancel</button>
+                            <button class='confirmEdit' type='button'>Confirm</button>
+                            <button class='cancel' type='button'>Cancel</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        <div id="footer">Footer</div>
+        <div id='footer'>Footer</div>
     </div>
-    <script src="main.js" type="text/javascript"></script>
+    <script src='main.js' type='text/javascript'></script>
 </body>
 </html>
