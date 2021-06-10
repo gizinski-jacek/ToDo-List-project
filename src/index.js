@@ -65,10 +65,7 @@ newFolderBtn.onclick = () => {
 }
 
 window.onclick = (e) => {
-    let check1 = e.target == modalNew;
-    let check2 = e.target == modalEditToDo;
-    let check3 = e.target == modalEditFolder;
-    if (check1 || check2 || check3) {
+    if (e.target == modalNew || e.target == modalEditToDo || e.target == modalEditFolder) {
         modalClose();
     }
 }
@@ -86,9 +83,6 @@ cancels.forEach(cancel => {
     }
 })
 
-//
-// Awaiting cleanup!
-//
 const modalClose = (modal = undefined) => {
     modalNew.style.display = 'none';
     modalNewToDo.style.display = 'none';
@@ -119,54 +113,6 @@ dropdownFolders.onclick = () => {
     containerFolders.classList.toggle('show');
 }
 
-confirmEdit.forEach(confirm => {
-    confirm.onclick = (e) => {
-        if (e.target.closest('form') == editToDo) {
-            if (editToDoTitle.value == '') {
-                alert('No title provided!');
-            } else if (editToDoDueDate.value == '') {
-                alert('No date provided!');
-            } else {
-                editToDoData();
-            }
-        }
-        if (e.target.closest('form') == editFolder) {
-            if (editFolderTitle.value == '') {
-                alert('No title provided!');
-            } else {
-                editFolderData();
-            }
-        }
-    }
-})
-
-const editToDoData = () => {
-    let arr = editToDo.className.split('__');
-    let todoIndex = libraryToDos.findIndex(todo => (todo.title === arr[0]) && (todo.targetFolder === arr[1]));
-    libraryToDos[todoIndex].updateAllData(
-        editToDoTitle.value, 
-        editToDoDescription.value,
-        editToDoDueDate.value, 
-        editToDoPriority.value,
-        editToDoTargetFolder.value
-        );
-    displayToDos();
-    saveCloseClear();
-}
-
-const editFolderData = () => {
-    let folderIndex = libraryFolders.findIndex(folder => folder.title === editFolder.className);
-    libraryFolders[folderIndex].updateTitle = editFolderTitle.value;
-    libraryToDos.forEach(todo => {
-        if (todo.targetFolder === editFolder.className) {
-            todo.updateTargetFolder = editFolderTitle.value;
-        }
-    })
-    displayToDos();
-    displayFolders();
-    saveCloseClear();
-}
-
 confirmNew.forEach(confirm => {
     confirm.onclick = (e) => {
         if (e.target.closest('form') == modalNewToDo) {
@@ -174,7 +120,7 @@ confirmNew.forEach(confirm => {
                 alert('No title provided!');
             } else if (newToDoDueDate.value == '') {
                 alert('No date provided!');
-            } else if (libraryToDos.find(todo => todo.title === newToDoTitle.value)) {
+            } else if (libraryToDos.find(todo => todo.getTitle === newToDoTitle.value)) {
                 alert('ToDo already exists! Provide unique title.');
             } else {
                 saveNewToDoData();
@@ -183,7 +129,7 @@ confirmNew.forEach(confirm => {
         if (e.target.closest('form') == modalNewFolder) {
             if (newFolderTitle.value == '') {
                 alert('No title provided!');
-            } else if (libraryFolders.find(folder => folder.title === newFolderTitle.value)) {
+            } else if (libraryFolders.find(folder => folder.getTitle === newFolderTitle.value)) {
                 alert('Folder already exists! Provide unique title.');
             } else {
                 saveNewFolderData();
@@ -199,12 +145,14 @@ const saveNewToDoData = () => {
     let priority = newToDoPriority.value;
     let targetFolder = newToDoTargetFolder.value;
     new ToDo(title, description, dueDate, priority, targetFolder);
+    saveAllLibraries();
     displayToDos();
     saveCloseClear();
 }
 
 const saveNewFolderData = () => {
     new Folder(newFolderTitle.value);
+    saveAllLibraries();
     updateSelectList();
     displayFolders();
     saveCloseClear();
@@ -238,66 +186,93 @@ const filterToDoList = () => {
     if (currentOpenFolder === 'Inbox') {
         return libraryToDos;
     } else if (currentOpenFolder === 'Today') {
-        newList = libraryToDos.filter(item => item.dueDate == dateFormat);
+        newList = libraryToDos.filter(item => item.getDueDate == dateFormat);
         return newList;
     // } else if (currentOpenFolder === 'Week') {
-    //     newList = libraryToDos.filter(item => item.dueDate >= dateFormat);
+    //     newList = libraryToDos.filter(item => item.getDueDate >= dateFormat);
     //     console.log(newList);
     //     return newList;
     } else {
-        newList = libraryToDos.filter(item => item.targetFolder === currentOpenFolder);
+        newList = libraryToDos.filter(item => item.getTargetFolder === currentOpenFolder);
         return newList;
     }
 }
 
-const deleteItem = (el) => {
-    let arr = el.id.split('__');
-    if (arr[0] == 'todo') {
-        let todoIndex = libraryToDos.findIndex(todo => (todo.title === arr[1]) && (todo.targetFolder === arr[2]));
-        libraryToDos.splice(todoIndex, 1);
-    } else if (arr[0] == 'folder') {
-        let folderIndex = libraryFolders.findIndex(folder => folder.title === arr[1])
-        libraryFolders.splice(folderIndex, 1);
-        libraryToDos.forEach(todo => {
-            if (todo.targetFolder === arr[1]) {
-                todo.updateTargetFolder = 'Inbox';
+confirmEdit.forEach(confirm => {
+    confirm.onclick = (e) => {
+        if (e.target.closest('form') == editToDo) {
+            if (editToDoTitle.value == '') {
+                alert('No title provided!');
+            } else if (editToDoDueDate.value == '') {
+                alert('No date provided!');
+            } else {
+                editToDoData();
             }
-        })
+        }
+        if (e.target.closest('form') == editFolder) {
+            if (editFolderTitle.value == '') {
+                alert('No title provided!');
+            } else {
+                editFolderData();
+            }
+        }
     }
+})
+
+const editToDoData = () => {
+    let arr = editToDo.className.split('__');
+    let todoIndex = libraryToDos.findIndex(todo => (todo.getTitle === arr[0]) && (todo.getTargetFolder === arr[1]));
+    libraryToDos[todoIndex].setTitle = editToDoTitle.value;
+    libraryToDos[todoIndex].setDescription = editToDoDescription.value;
+    libraryToDos[todoIndex].setDueDate = editToDoDueDate.value;
+    libraryToDos[todoIndex].setPriority = editToDoPriority.value;
+    libraryToDos[todoIndex].setTargetFolder = editToDoTargetFolder.value;
+    saveAllLibraries();
+    displayToDos();
+    saveCloseClear();
+}
+
+const editFolderData = () => {
+    let folderIndex = libraryFolders.findIndex(folder => folder.getTitle === editFolder.className);
+    libraryFolders[folderIndex].setTitle = editFolderTitle.value;
+    libraryToDos.forEach(todo => {
+        if (todo.getTargetFolder === editFolder.className) {
+            todo.setTargetFolder = editFolderTitle.value;
+        }
+    })
+    updateCurrentOpenFolder(editFolderTitle.value);
     saveAllLibraries();
     updateSelectList();
     displayToDos();
     displayFolders();
+    saveCloseClear();
 }
 
 const editItem = (el) => {
     let arr = el.id.split('__');
     if (arr[0] == 'todo') {
-        let findToDO = libraryToDos.find(todo => (todo.title === arr[1]) && (todo.targetFolder === arr[2]));
+        let findToDO = libraryToDos.find(todo => (todo.getTitle === arr[1]) && (todo.getTargetFolder === arr[2]));
         loadEditToDo(findToDO);
         modalEditToDo.style.display = 'flex';
         editToDo.className = arr[1] + '__' + arr[2];
     } else if (arr[0] == 'folder') {
-        let findFolder = libraryFolders.find(folder => folder.title === arr[1]);
+        let findFolder = libraryFolders.find(folder => folder.getTitle === arr[1]);
         loadEditFolder(findFolder);
         modalEditFolder.style.display = 'flex';
         editFolder.className = arr[1];
     }
-    saveAllLibraries();
-    updateSelectList();
-    displayToDos();
-    displayFolders();
 }
 
 const loadEditToDo = (item) => {
-    editToDoTitle.value = item.title;
-    editToDoDescription.value = item.description;
-    editToDoDueDate.value = item.dueDate;
-    editToDoPriority.value = item.priority;
+    editToDoTitle.value = item.getTitle;
+    editToDoDescription.value = item.getDescription;
+    editToDoDueDate.value = item.getDueDate;
+    editToDoPriority.value = item.getPriority;
+    editToDoTargetFolder.value = item.getTargetFolder;
 }
 
 const loadEditFolder = (item) => {
-    editFolderTitle.value = item.title;
+    editFolderTitle.value = item.getTitle;
 }
 
 const updateSelectList = () => {
@@ -310,11 +285,32 @@ const updateSelectList = () => {
 
         libraryFolders.forEach(folder => {
             let option = document.createElement('option');
-            option.value = folder.title;
-            option.textContent = folder.title;
+            option.value = folder.getTitle;
+            option.textContent = folder.getTitle;
             select.append(option);
         })
     })
+}
+
+const deleteItem = (el) => {
+    let arr = el.id.split('__');
+    if (arr[0] == 'todo') {
+        let todoIndex = libraryToDos.findIndex(todo => (todo.getTitle === arr[1]) && (todo.getTargetFolder === arr[2]));
+        libraryToDos.splice(todoIndex, 1);
+    } else if (arr[0] == 'folder') {
+        let folderIndex = libraryFolders.findIndex(folder => folder.getTitle === arr[1])
+        libraryFolders.splice(folderIndex, 1);
+        libraryToDos.forEach(todo => {
+            if (todo.getTargetFolder === arr[1]) {
+                todo.setTargetFolder = 'Inbox';
+            }
+        })
+    }
+    updateCurrentOpenFolder();
+    saveAllLibraries();
+    updateSelectList();
+    displayToDos();
+    displayFolders();
 }
 
 const clearForms = () => {
@@ -337,8 +333,8 @@ const createPara = (text) => {
 
 const createToDoContainer = (item) => {
     let main = document.createElement('div');
-    main.id = 'todo__' + item.title + '__' + item.targetFolder;
-    main.classList.add('todo', 'priority' + item.priority);
+    main.id = 'todo__' + item.getTitle + '__' + item.getTargetFolder;
+    main.classList.add('todo', 'priority' + item.getPriority);
     main.addEventListener('click', (e) => {
         e.currentTarget.querySelectorAll('.moreDetails')[0].classList.toggle('show');
     })
@@ -347,8 +343,8 @@ const createToDoContainer = (item) => {
     cont1.classList.add('fewDetails');
 
     let sub1 = document.createElement('div');
-    sub1.append(createPara(item.dueDate));
-    sub1.append(createPara(item.title));
+    sub1.append(createPara(item.getDueDate));
+    sub1.append(createPara(item.getTitle));
 
     let sub2 = document.createElement('div');
     sub2.classList.add('controls');
@@ -360,8 +356,8 @@ const createToDoContainer = (item) => {
 
     let cont2 = document.createElement('div');
     cont2.classList.add('moreDetails');
-    cont2.append(createPara(item.description));
-    cont2.append(createPara('Folder: ' + item.targetFolder));
+    cont2.append(createPara(item.getDescription));
+    cont2.append(createPara('Folder: ' + item.getTargetFolder));
 
     main.append(cont1);
     main.append(cont2);
@@ -371,11 +367,11 @@ const createToDoContainer = (item) => {
 
 const createFolderContainer = (item) => {
     let main = document.createElement('div');
-    main.id = 'folder__' + item.title;
-    main.textContent = item.title;
+    main.id = 'folder__' + item.getTitle;
+    main.textContent = item.getTitle;
     main.classList.add('folder');
     main.addEventListener('click', () => {
-        updateCurrentOpenFolder(item.title);
+        updateCurrentOpenFolder(item.getTitle);
         displayToDos();
     })
     let sub = document.createElement('div');
@@ -416,46 +412,63 @@ const createEditBtn = () => {
 
 class ToDo {
     constructor(title, description, dueDate, priority, targetFolder) {
-        this.title = title;
-        this.description = description;
-        this.priority = priority;
-        this.dueDate = dueDate;
-        this.targetFolder = targetFolder;
+        this._title = title;
+        this._description = description;
+        this._priority = priority;
+        this._dueDate = dueDate;
+        this._targetFolder = targetFolder;
+
         libraryToDos.push(this);
         saveLibraryToDos();
     }
-    set updateTitle(updateTitle) {
-        this.title = updateTitle;
+
+    set setTitle(setTitle) {
+        this._title = setTitle;
     }
-    set updateDescription(updateDescription) {
-        this.description = updateDescription;
+    set setDescription(setDescription) {
+        this._description = setDescription;
     }
-    set updatePriority(updatePriority) {
-        this.priority = updatePriority;
+    set setPriority(setPriority) {
+        this._priority = setPriority;
     }
-    set updateDueDate(updateDueDate) {
-        this.dueDate = updateDueDate;
+    set setDueDate(setDueDate) {
+        this._dueDate = setDueDate;
     }
-    set updateTargetFolder(updateTargetFolder) {
-        this.targetFolder = updateTargetFolder;
+    set setTargetFolder(setTargetFolder) {
+        this._targetFolder = setTargetFolder;
     }
-    updateAllData(data0, data1, data2, data3, data4) {
-        this.updateTitle = data0;
-        this.updateDescription = data1;
-        this.updateDueDate = data2;
-        this.updatePriority = data3;
-        this.updateTargetFolder = data4;
+
+    get getTitle() {
+        return this._title;
+    }
+    get getDescription() {
+        return this._description;
+    }
+    get getPriority() {
+        return this._priority;
+    }
+    get getDueDate() {
+        return this._dueDate;
+    }
+    get getTargetFolder() {
+        return this._targetFolder;
     }
 }
 
 class Folder {
     constructor(title) {
-        this.title = title;
+        this._title = title;
+
         libraryFolders.push(this);
         saveLibraryFolders();
     }
-    set updateTitle(updateTitle) {
-        this.title = updateTitle;
+
+    set setTitle(setTitle) {
+        this._title = setTitle;
+    }
+
+    get getTitle() {
+        return this._title;
     }
 }
 
@@ -472,8 +485,26 @@ const saveAllLibraries = () => {
     saveLibraryFolders();
 }
 
-const libraryToDos = JSON.parse(localStorage.getItem('libraryToDos')) || [];
-const libraryFolders = JSON.parse(localStorage.getItem('libraryFolders')) || [];
+const loadLibraryToDos = () => {
+    let stringData = JSON.parse(localStorage.getItem('libraryToDos'));
+    let parsedData = stringData.map(data => {
+        data.__proto__ = ToDo.prototype;
+        return data;
+    });
+    return parsedData;
+}
+
+const loadLibraryFolders = () => {
+    let stringData = JSON.parse(localStorage.getItem('libraryFolders'));
+    let parsedData = stringData.map(data => {
+        data.__proto__ = Folder.prototype;
+        return data;
+    });
+    return parsedData;
+}
+
+const libraryToDos = JSON.parse(localStorage.getItem('libraryToDos')) ? loadLibraryToDos() : [];
+const libraryFolders = JSON.parse(localStorage.getItem('libraryFolders')) ? loadLibraryFolders() : [];
 
 const loadDefaults = () => {
     new Folder('Kitchen');
@@ -491,7 +522,7 @@ if ((!localStorage.getItem('libraryToDos')) && (!localStorage.getItem('libraryFo
     loadDefaults();
 }
 
-// Should I populate with defaults if user decides to delete all folder and todos?
+// Should I populate with defaults if user decides to delete all folders and todos?
 if ((libraryToDos.length === 0) && (libraryFolders.length === 0)) {
     loadDefaults();
 }
@@ -501,3 +532,4 @@ displayFolders();
 displayToDos();
 clearForms();
 updateSelectList();
+saveAllLibraries();
