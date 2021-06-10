@@ -1,5 +1,6 @@
 // import * as code from './code';
 // import * as DOM from './DOM';
+import { DateTime } from 'luxon';
 
 'use strict'
 
@@ -178,20 +179,18 @@ const displayFolders = () => {
 }
 
 const filterToDoList = () => {
-    let today = new Date();
-    let dateFormat = new Date(today.getTime() - (today.getTimezoneOffset() * 60000))
-        .toISOString()
-        .split("T")[0];
+    let daily = DateTime.now().toISO().split('T')[0];
+    let weekly = DateTime.now().plus({ weeks: 1 }).toISO().split('T')[0];
     let newList = [];
     if (currentOpenFolder === 'Inbox') {
         return libraryToDos;
     } else if (currentOpenFolder === 'Today') {
-        newList = libraryToDos.filter(item => item.getDueDate == dateFormat);
+        newList = libraryToDos.filter(item => item.getDueDate == daily);
         return newList;
-    // } else if (currentOpenFolder === 'Week') {
-    //     newList = libraryToDos.filter(item => item.getDueDate >= dateFormat);
-    //     console.log(newList);
-    //     return newList;
+    } else if (currentOpenFolder === 'Week') {
+        newList = libraryToDos.filter(item => item.getDueDate >= daily && item.getDueDate <= weekly);
+        console.log(newList);
+        return newList;
     } else {
         newList = libraryToDos.filter(item => item.getTargetFolder === currentOpenFolder);
         return newList;
@@ -511,11 +510,11 @@ const loadDefaults = () => {
     new Folder('House');
     new Folder('Gym');
 
-    new ToDo('Jake Mail', 'Send Email to Jake about upcoming project', '2025-01-01', 'High', 'Inbox');
-    new ToDo('Basement', 'Clean trash from basement', '2027-02-02', 'Medium', 'House');
-    new ToDo('Lightbulb', 'Replace kitchen lightbulb', '2021-06-08', 'Low', 'Kitchen');
-    new ToDo('Carpet', 'Clean the carpet', new Date().toISOString().split("T")[0], 'Low', 'House');
-    new ToDo('Gym', 'Renew gym membership', new Date().toISOString().split("T")[0], 'Medium', 'Gym');
+    new ToDo('Jake Mail', 'Send Email to Jake about upcoming project', DateTime.now().plus({ days: 1 }).toISO().split('T')[0], 'High', 'Inbox');
+    new ToDo('Basement', 'Clean trash from basement', DateTime.now().plus({ weeks: 1 }).toISO().split('T')[0], 'Medium', 'House');
+    new ToDo('Lightbulb', 'Replace kitchen lightbulb', DateTime.now().toISO().split('T')[0], 'Low', 'Kitchen');
+    new ToDo('Carpet', 'Clean the carpet', DateTime.now().minus({ days: 1 }).toISO().split('T')[0], 'Low', 'House');
+    new ToDo('Gym', 'Renew gym membership', DateTime.now().minus({ weeks: 1 }).toISO().split('T')[0], 'Medium', 'Gym');
 }
 
 if ((!localStorage.getItem('libraryToDos')) && (!localStorage.getItem('libraryFolders'))) {
