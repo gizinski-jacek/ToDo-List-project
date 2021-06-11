@@ -243,7 +243,9 @@ const editFolderData = () => {
             todo.setTargetFolder = editFolderTitle.value;
         }
     })
-    updateCurrentOpenFolder(editFolderTitle.value);
+    if (currentOpenFolder === editFolder.className) {
+        updateCurrentOpenFolder(editFolderTitle.value)
+    }
     saveAllLibraries();
     displayToDos();
     displayFolders();
