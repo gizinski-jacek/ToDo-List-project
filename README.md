@@ -1,5 +1,5 @@
 # ToDo-List-project
 
-An attempt at making ToDo application for keeping track of things to do.
+An attempt at making ToDo application for keeping track of your plans.
 
-###### This project is being worked on right now, expect minor and major changes.
+###### This project is not yet fully finished, it still requires some polish and maybe few functionalities.
