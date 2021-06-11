@@ -147,16 +147,19 @@ const saveNewToDoData = () => {
     let targetFolder = newToDoTargetFolder.value;
     new ToDo(title, description, dueDate, priority, targetFolder);
     saveAllLibraries();
+    displayFolders();
     displayToDos();
     saveCloseClear();
+    counterUpdate();
 }
 
 const saveNewFolderData = () => {
     new Folder(newFolderTitle.value);
     saveAllLibraries();
-    updateSelectList();
     displayFolders();
     saveCloseClear();
+    updateSelectList();
+    counterUpdate();
 }
 
 const displayToDos = () => {
@@ -165,7 +168,7 @@ const displayToDos = () => {
     h3.textContent = currentOpenFolder;
     containerToDos.append(h3);
 
-    let filteredList = filterToDoList();
+    let filteredList = filterToDoList(currentOpenFolder);
     filteredList.forEach(todo => {
         containerToDos.append(createToDoContainer(todo));
     })
@@ -178,21 +181,20 @@ const displayFolders = () => {
     })
 }
 
-const filterToDoList = () => {
+const filterToDoList = (id) => {
     let daily = DateTime.now().toISO().split('T')[0];
     let weekly = DateTime.now().plus({ weeks: 1 }).toISO().split('T')[0];
     let newList = [];
-    if (currentOpenFolder === 'Inbox') {
+    if (id === 'Inbox') {
         return libraryToDos;
-    } else if (currentOpenFolder === 'Today') {
+    } else if (id === 'Today') {
         newList = libraryToDos.filter(item => item.getDueDate == daily);
         return newList;
-    } else if (currentOpenFolder === 'Week') {
+    } else if (id === 'Week') {
         newList = libraryToDos.filter(item => item.getDueDate >= daily && item.getDueDate <= weekly);
-        console.log(newList);
         return newList;
     } else {
-        newList = libraryToDos.filter(item => item.getTargetFolder === currentOpenFolder);
+        newList = libraryToDos.filter(item => item.getTargetFolder === id);
         return newList;
     }
 }
@@ -229,6 +231,8 @@ const editToDoData = () => {
     saveAllLibraries();
     displayToDos();
     saveCloseClear();
+    updateSelectList();
+    counterUpdate();
 }
 
 const editFolderData = () => {
@@ -241,24 +245,25 @@ const editFolderData = () => {
     })
     updateCurrentOpenFolder(editFolderTitle.value);
     saveAllLibraries();
-    updateSelectList();
     displayToDos();
     displayFolders();
     saveCloseClear();
+    updateSelectList();
+    counterUpdate();
 }
 
 const editItem = (el) => {
-    let arr = el.id.split('__');
-    if (arr[0] == 'todo') {
-        let findToDO = libraryToDos.find(todo => (todo.getTitle === arr[1]) && (todo.getTargetFolder === arr[2]));
+    if (el.classList.contains('todo')) {
+        let arr = el.id.split('__');
+        let findToDO = libraryToDos.find(todo => (todo.getTitle === arr[0]) && (todo.getTargetFolder === arr[1]));
         loadEditToDo(findToDO);
         modalEditToDo.style.display = 'flex';
-        editToDo.className = arr[1] + '__' + arr[2];
-    } else if (arr[0] == 'folder') {
-        let findFolder = libraryFolders.find(folder => folder.getTitle === arr[1]);
+        editToDo.className = arr[0] + '__' + arr[1];
+    } else if (el.classList.contains('folder')) {
+        let findFolder = libraryFolders.find(folder => folder.getTitle === el.id);
         loadEditFolder(findFolder);
         modalEditFolder.style.display = 'flex';
-        editFolder.className = arr[1];
+        editFolder.className = el.id;
     }
 }
 
@@ -291,25 +296,35 @@ const updateSelectList = () => {
     })
 }
 
+const counterUpdate = () => {
+    let allCounters = document.querySelectorAll('.counter');
+    allCounters.forEach(counter => {
+        let id = counter.closest('div').id;
+        let count = filterToDoList(id).length;
+        counter.textContent = count;
+    })
+}
+
 const deleteItem = (el) => {
-    let arr = el.id.split('__');
-    if (arr[0] == 'todo') {
-        let todoIndex = libraryToDos.findIndex(todo => (todo.getTitle === arr[1]) && (todo.getTargetFolder === arr[2]));
+    if (el.classList.contains('todo')) {
+        let arr = el.id.split('__');
+        let todoIndex = libraryToDos.findIndex(todo => (todo.getTitle === arr[0]) && (todo.getTargetFolder === arr[1]));
         libraryToDos.splice(todoIndex, 1);
-    } else if (arr[0] == 'folder') {
-        let folderIndex = libraryFolders.findIndex(folder => folder.getTitle === arr[1])
+    } else if (el.classList.contains('folder')) {
+        let folderIndex = libraryFolders.findIndex(folder => folder.getTitle === el.id)
         libraryFolders.splice(folderIndex, 1);
         libraryToDos.forEach(todo => {
-            if (todo.getTargetFolder === arr[1]) {
+            if (todo.getTargetFolder === el.id) {
                 todo.setTargetFolder = 'Inbox';
             }
         })
     }
     updateCurrentOpenFolder();
     saveAllLibraries();
-    updateSelectList();
     displayToDos();
     displayFolders();
+    updateSelectList();
+    counterUpdate();
 }
 
 const clearForms = () => {
@@ -332,7 +347,7 @@ const createPara = (text) => {
 
 const createToDoContainer = (item) => {
     let main = document.createElement('div');
-    main.id = 'todo__' + item.getTitle + '__' + item.getTargetFolder;
+    main.id = item.getTitle + '__' + item.getTargetFolder;
     main.classList.add('todo', 'priority' + item.getPriority);
     main.addEventListener('click', (e) => {
         e.currentTarget.querySelectorAll('.moreDetails')[0].classList.toggle('show');
@@ -366,21 +381,28 @@ const createToDoContainer = (item) => {
 
 const createFolderContainer = (item) => {
     let main = document.createElement('div');
-    main.id = 'folder__' + item.getTitle;
+    main.id = item.getTitle;
     main.textContent = item.getTitle;
     main.classList.add('folder');
     main.addEventListener('click', () => {
         updateCurrentOpenFolder(item.getTitle);
         displayToDos();
     })
-    let sub = document.createElement('div');
+    let sub = document.createElement('span');
     sub.classList.add('controls');
     sub.append(createEditBtn());
     sub.append(createDelBtn());
+    sub.append(createCounter());
 
     main.append(sub);
 
     return main;
+}
+
+const createCounter = () => {
+    const counter = createPara(0);
+    counter.classList.add('counter');
+    return counter;
 }
 
 const createDelBtn = () => {
@@ -531,4 +553,4 @@ displayFolders();
 displayToDos();
 clearForms();
 updateSelectList();
-saveAllLibraries();
+counterUpdate();
