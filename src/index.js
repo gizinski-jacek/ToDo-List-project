@@ -329,6 +329,19 @@ const deleteItem = (el) => {
     counterUpdate();
 }
 
+const changeStatus = (target) => {
+    let arr = target.id.split('__');
+    let todoIndex = libraryToDos.findIndex(todo => (todo.getTitle === arr[0]) && (todo.getTargetFolder === arr[1]));
+    libraryToDos[todoIndex].setStatus = libraryToDos[todoIndex].getStatus;
+    displayToDos();
+}
+
+const checkOutdated = () => {
+    libraryToDos.forEach(todo => {
+        todo.checkOutdated = todo.getDueDate;
+    })
+}
+
 const clearForms = () => {
     document.querySelectorAll('form').forEach(form => {
         form.reset();
@@ -351,32 +364,41 @@ const createToDoContainer = (item) => {
     let main = document.createElement('div');
     main.id = item.getTitle + '__' + item.getTargetFolder;
     main.classList.add('todo', 'priority' + item.getPriority);
-    main.addEventListener('click', (e) => {
-        e.currentTarget.querySelectorAll('.moreDetails')[0].classList.toggle('show');
+    if (item.getStatus) {
+        main.classList.add('completed')
+    }
+    if (item.checkOutdated) {
+        main.classList.add('outdated');
+    }
+
+    let contFew = document.createElement('div');
+    contFew.classList.add('fewDetails');
+
+    let div1 = document.createElement('div');
+    let check = document.createElement('div');
+    check.classList.add('checkCompleted');
+    check.addEventListener('click', (e) => {
+        changeStatus(e.target.closest('.todo'));
     })
+    div1.append(check);
+    div1.append(createPara(item.getDueDate + '\u00A0\u00A0\u00A0' + item.getTitle));
 
-    let cont1 = document.createElement('div');
-    cont1.classList.add('fewDetails');
+    let div2 = document.createElement('div');
+    div2.classList.add('controls');
+    div2.append(createDetailsBtn());
+    div2.append(createEditBtn());
+    div2.append(createDelBtn());
 
-    let sub1 = document.createElement('div');
-    sub1.append(createPara(item.getDueDate));
-    sub1.append(createPara(item.getTitle));
+    contFew.append(div1);
+    contFew.append(div2);
 
-    let sub2 = document.createElement('div');
-    sub2.classList.add('controls');
-    sub2.append(createEditBtn());
-    sub2.append(createDelBtn());
+    let contMore = document.createElement('div');
+    contMore.classList.add('moreDetails');
+    contMore.append(createPara(item.getDescription));
+    contMore.append(createPara('Folder: ' + item.getTargetFolder));
 
-    cont1.append(sub1);
-    cont1.append(sub2);
-
-    let cont2 = document.createElement('div');
-    cont2.classList.add('moreDetails');
-    cont2.append(createPara(item.getDescription));
-    cont2.append(createPara('Folder: ' + item.getTargetFolder));
-
-    main.append(cont1);
-    main.append(cont2);
+    main.append(contFew);
+    main.append(contMore);
 
     return main;
 }
@@ -405,6 +427,16 @@ const createCounter = () => {
     const counter = createPara(0);
     counter.classList.add('counter');
     return counter;
+}
+
+const createDetailsBtn = () => {
+    const detailsBtn = document.createElement('div');
+    detailsBtn.classList.add('detailsBtn');
+    detailsBtn.textContent = 'Details';
+    detailsBtn.addEventListener('click', (e) => {
+        e.target.closest('.todo').querySelectorAll('.moreDetails')[0].classList.toggle('show');
+    })
+    return detailsBtn;
 }
 
 const createDelBtn = () => {
@@ -440,6 +472,8 @@ class ToDo {
         this._priority = priority;
         this._dueDate = dueDate;
         this._targetFolder = targetFolder;
+        this._completed = false;
+        this._outdated = dueDate < DateTime.now().toISO().split('T')[0];
 
         libraryToDos.push(this);
         saveLibraryToDos();
@@ -456,9 +490,16 @@ class ToDo {
     }
     set setDueDate(setDueDate) {
         this._dueDate = setDueDate;
+        checkOutdated(setDueDate);
     }
     set setTargetFolder(setTargetFolder) {
         this._targetFolder = setTargetFolder;
+    }
+    set setStatus(status) {
+        this._completed = !status;
+    }
+    set checkOutdated(date) {
+        this._outdated = date < DateTime.now().toISO().split('T')[0];
     }
 
     get getTitle() {
@@ -475,6 +516,12 @@ class ToDo {
     }
     get getTargetFolder() {
         return this._targetFolder;
+    }
+    get getStatus() {
+        return this._completed;
+    }
+    get checkOutdated() {
+        return this._outdated;
     }
 }
 
@@ -551,6 +598,7 @@ if ((libraryToDos.length === 0) && (libraryFolders.length === 0)) {
 }
 
 updateCurrentOpenFolder();
+checkOutdated();
 displayFolders();
 displayToDos();
 clearForms();
