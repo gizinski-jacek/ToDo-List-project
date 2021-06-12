@@ -49,7 +49,6 @@ body {
 .controls {
     display: flex;
     align-items: center;
-    height: 16px;
 }
 
 .counter {
@@ -83,8 +82,55 @@ body {
     padding: 10px;
 }
 
+.detailsBtn {
+    background-color: rgba(0, 255, 255, 0.8);
+    font-size: 0.75rem;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.checkCompleted {
+    cursor: pointer;
+    margin-right: 10px;
+    border: 1px solid black;
+    border-radius: 50%;
+    min-height: 1rem;
+    min-width: 1rem;
+    box-sizing: border-box;
+}
+
+.completed .checkCompleted {
+    display: block;
+    border: none;
+    background-image: url('imgs/check-mark.png');
+    background-color: black;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.completed p {
+    text-decoration: line-through;
+}
+
+.completed {
+    filter: brightness(75%);
+    box-shadow: none !important;
+}
+
+.outdated {
+    box-shadow: 0 0 8px 4px rgb(255, 0, 0);
+}
+
+.outdated:hover {
+    box-shadow: 0 0 4px 2px rgb(255, 0, 0);
+}
+
 .fewDetails div {
     display: flex;
+    align-items: center;
 }
 
 .fewDetails p {
@@ -140,7 +186,7 @@ p {
 }
 
 .priorityHigh {
-    background-color: rgba(255, 50, 50, 0.7);
+    background-color: rgba(255, 50, 50, 0.8);
 }
 
 .priorityMedium {
@@ -148,7 +194,7 @@ p {
 }
 
 .priorityLow {
-    background-color: rgba(50, 255, 50, 0.5);
+    background-color: rgba(50, 255, 50, 0.7);
 }
 
 #containerFolders {
