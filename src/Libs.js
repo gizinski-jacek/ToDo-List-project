@@ -27,7 +27,7 @@ class ToDo {
     }
     set setDueDate(setDueDate) {
         this._dueDate = setDueDate;
-        checkOutdated(setDueDate);
+        this.checkOutdated = setDueDate;
     }
     set setTargetFolder(setTargetFolder) {
         this._targetFolder = setTargetFolder;
@@ -80,8 +80,8 @@ class Folder {
 }
 
 const filterToDoList = (id) => {
-    let daily = DateTime.now().toISO().split('T')[0];
-    let weekly = DateTime.now().plus({ weeks: 1 }).toISO().split('T')[0];
+    const daily = DateTime.now().toISO().split('T')[0];
+    const weekly = DateTime.now().plus({ weeks: 1 }).toISO().split('T')[0];
     let newList = [];
     if (id === 'Inbox') {
         return libraryToDos;
@@ -117,8 +117,8 @@ const saveAllLibraries = () => {
 }
 
 const loadLibraryToDos = () => {
-    let stringData = JSON.parse(localStorage.getItem('libraryToDos'));
-    let parsedData = stringData.map(data => {
+    const stringData = JSON.parse(localStorage.getItem('libraryToDos'));
+    const parsedData = stringData.map(data => {
         data.__proto__ = ToDo.prototype;
         return data;
     });
@@ -126,8 +126,8 @@ const loadLibraryToDos = () => {
 }
 
 const loadLibraryFolders = () => {
-    let stringData = JSON.parse(localStorage.getItem('libraryFolders'));
-    let parsedData = stringData.map(data => {
+    const stringData = JSON.parse(localStorage.getItem('libraryFolders'));
+    const parsedData = stringData.map(data => {
         data.__proto__ = Folder.prototype;
         return data;
     });
