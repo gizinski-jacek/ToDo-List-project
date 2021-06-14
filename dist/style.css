@@ -1,18 +1,47 @@
-html, body {
+body {
     height: 100vh;
+}
+
+body * {
+    font-family: Courier, monospace;
 }
 
 #header {
     display: flex;
-    height: 10%;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
+    height: 10%;
     background-color: rgb(255, 125, 50);
 }
 
-.main {
-    height: 90%;
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin: auto 20px;
+    font-weight: 600;
+}
+
+#newItem {
     display: flex;
+    justify-content: center;
+    height: 2.5rem;
+    width: 2.5rem;
+    margin: 10px;
+    padding: 3px 6px 6px 6px;
+    font-size: 2.5rem;
+    background-color: rgba(255, 150, 150, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}
+
+#newItem:hover {
+    box-shadow: 0 0 10px rgb(0, 0, 0);
+}
+
+.main {
+    display: flex;
+    height: 90%;
 }
 
 .menu {
@@ -26,18 +55,51 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    text-align: left;
-    background-color: rgba(0, 255, 255, 0.5);
-    border: 1px solid rgba(0, 100, 100, 0.2);
-    border-radius: 5px;
-    font-size: 1.2rem;
-    margin: 15px;
+    margin: 15px 15px 0 15px;
     padding: 10px;
+    text-align: left;
+    font-size: 1.2rem;
+    background-color: rgba(0, 255, 255, 0.5);
+    border: 1px solid rgba(0, 100, 100, 0.3);
+    border-radius: 5px;
 }
 
 .folder:hover {
-    box-shadow: 0 0 1px rgb(0, 0, 0);
     background-color: rgb(0, 255, 255);
+    box-shadow: 0 0 3px rgb(0, 0, 0);
+}
+
+.active {
+    background-color: rgb(0, 240, 240) !important;
+    border-color: rgba(0, 100, 100, 0.6);
+    box-shadow: 0 0 3px rgb(0, 0, 0);
+}
+
+.counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 18px;
+    width: 18px;
+    margin-left: 15px;
+    font-size: 0.6rem;
+    background-color: rgb(255, 255, 0);
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+
+#containerFolders {
+    display: none;
+    flex-direction: column;
+    margin-top: 15px;
+    padding-bottom: 15px;
+    border-top: 1px solid rgb(0, 0, 0);
+    overflow-y: auto;
+}
+
+.show {
+    display: flex !important;
 }
 
 .controls {
@@ -45,139 +107,30 @@ html, body {
     align-items: center;
 }
 
-.counter {
-    margin-left: 15px;
-    border: 1px solid black;
-    font-size: 0.6rem;
-    border-radius: 50%;
-    border-style: solid;
-    line-height: unset;
-    background: rgb(255, 255, 0);
-    padding: 1px 4px;
-}
-
-.todo {
-    display: flex;
-    margin: 25px 25px 0 25px;
-    flex-direction: column;
-    box-shadow: 0 0 5px rgb(50, 50, 50);
-}
-
-.todo:hover {
-    box-shadow: 0 0 10px rgb(50, 50, 50);
-}
-
-.fewDetails {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-}
-
-.detailsBtn {
-    background-color: rgb(50, 200, 250);
-    font-size: 0.75rem;
-    padding: 5px;
-    border: 1px solid black;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.checkCompleted {
-    cursor: pointer;
-    margin-right: 10px;
-    border: 1px solid black;
-    border-radius: 50%;
-    min-height: 1rem;
-    min-width: 1rem;
-    box-sizing: border-box;
-}
-
-.completed .checkCompleted {
-    display: block;
-    border: none;
-    background-image: url('imgs/check-mark.png');
-    background-color: black;
-    background-repeat: no-repeat;
-    background-size: contain;
-}
-
-.completed p {
-    text-decoration: line-through;
-}
-
-.completed {
-    filter: brightness(75%);
-    box-shadow: none !important;
-}
-
-.outdated {
-    box-shadow: 0 0 8px 4px rgb(255, 0, 0);
-}
-
-.outdated:hover {
-    box-shadow: 0 0 4px 2px rgb(255, 0, 0);
-}
-
-.fewDetails div {
-    display: flex;
-    align-items: center;
-}
-
-.fewDetails p {
-    margin-right: 20px;
-}
-
-.moreDetails {
-    display: none;
-    padding: 10px;
-    justify-content: space-between;
-    border-top: 1px solid black;
-}
-
 input[type=image] {
-    margin-left: 15px;
     height: 1rem;
     width: 1rem;
-}
-
-h1 {
-    text-align: center;
-    font-size: 2rem;
-    margin: auto 20px;
-    font-weight: 600;
-}
-
-#newItem {
-    display: flex;
-    justify-content: center;
-    background-color: rgba(255, 150, 150, 0.8);
-    margin: 10px;
-    font-size: 2.5rem;
-    height: 2.5rem;
-    width: 2.5rem;
-    border: 1px dashed rgba(0, 0, 0, 0.8);
-    border-radius: 50%;
-    padding: 3px 6px 6px 6px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-}
-
-#newItem:hover {
-    box-shadow: 0 0 10px rgb(0, 0, 0);
-}
-
-p {
-    line-height: 1.5rem;
+    margin-left: 15px;
 }
 
 #containerToDos {
     display: flex;
     flex-direction: column;
     width: 75%;
-    background-color: rgb(225, 225, 200);
     padding-bottom: 25px;
+    background-color: rgb(225, 225, 200);
     overflow-y: auto;
+}
+
+.todo {
+    display: flex;
+    flex-direction: column;
+    margin: 25px 25px 0 25px;
+    box-shadow: 0 0 5px rgb(50, 50, 50);
+}
+
+.todo:hover {
+    box-shadow: 0 0 10px rgb(50, 50, 50);
 }
 
 .priorityHigh {
@@ -192,76 +145,126 @@ p {
     background-color: rgba(50, 255, 50, 0.7);
 }
 
-#containerFolders {
+.completed {
+    filter: brightness(75%);
+}
+
+.completed p {
+    text-decoration: line-through;
+}
+
+.outdated {
+    box-shadow: 0 0 6px 4px rgb(255, 0, 0);
+}
+
+.outdated:hover {
+    box-shadow: 0 0 6px 2px rgb(255, 0, 0);
+}
+
+.fewDetails {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.fewDetails div {
+    display: flex;
+    align-items: center;
+}
+
+.fewDetails p {
+    margin: 0 20px;
+}
+
+.checkCompleted {
+    min-height: 1rem;
+    min-width: 1rem;
+    margin: 0 5px;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+
+.completed .checkCompleted {
+    display: block;
+    border: none;
+    background-image: url('imgs/check-mark.png');
+    background-color: rgb(0, 0, 0);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.detailsBtn {
+    padding: 2px 5px;
+    font-size: 0.6rem;
+    background-color: rgb(50, 200, 250);
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 5px;
+}
+
+.moreDetails {
     display: none;
+    justify-content: space-between;
+    padding: 10px;
+    border-top: 1px solid rgb(0, 0, 0);
+}
+
+#modalNew, #modalEditFolder, #modalEditToDo {
+    display: none;
+    position: fixed;
+    top: 0;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
-    border-top: 1px solid black;
-    padding-bottom: 15px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-#containerFolders .folder {
-    margin: 15px 15px 0 15px;
+.modalContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 3px solid rgb(0, 0, 0);
+    border-radius: 5px;
 }
 
-.show {
-    display: flex !important;
+#modalHead {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 1.2rem;
+    background-color: rgb(255, 125, 50);
+    border-bottom: 3px solid black;
+    box-sizing: border-box;
+}
+
+h2, .button-X {
+    margin: 10px 15px;
+    font-weight: 600;
+}
+
+.button-X {
+    transform: scale(1.5);
 }
 
 .modalBody {
     display: flex;
 }
 
-#modalNew, #modalEditFolder, #modalEditToDo {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-#modalHead {
-    justify-content: space-between;
-    font-size: 1.2rem;
-    display: flex;
-    background-color: rgb(255, 125, 50);
-    border-bottom: 3px solid black;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.modalContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: 3px solid black;
-    border-radius: 5px;
-}
-
-.button-X {
-    font-family: monospace;
-    transform: scale(1.5);
-    font-weight: 600;
-}
-
-h2, .button-X {
-    padding: 10px 15px;
-}
-
 #modalNewMenu {
     display: flex;
     flex-direction: column;
     background-color: rgb(100, 200, 225);
-    border-right: 2px solid black;
+    border-right: 2px solid rgb(0, 0, 0);
 }
 
 #modalNewMenu span {
     padding: 20px;
-    border-bottom: 2px solid black;
+    font-size: 1.2rem;
+    border-bottom: 2px solid rgb(0, 0, 0);
 }
 
 #modalNewMenu span:hover {
@@ -276,18 +279,28 @@ form {
     flex-direction: column;
     height: 100%;
     width: 100%;
-    padding-top: 10px;
     min-height: 550px;
     min-width: 450px;
+    padding-top: 10px;
     background-color: rgb(225,225,200);
     box-sizing: border-box;
 }
 
 form * {
+    width: 300px;
     margin: 10px;
     padding: 5px;
-    width: 300px;
     box-sizing: border-box;
+}
+
+label {
+    margin: 10px 0 0 10px;
+    padding: 0;
+}
+
+textarea {
+    height: 85px;
+    resize: none;
 }
 
 .modalControls {
@@ -297,19 +310,27 @@ form * {
 }
 
 .confirmNew, .confirmEdit, .cancel {
-    width: 150px;
+    width: 40%;
 }
 
-textarea {
-    height: 85px;
-    resize: none;
+.confirmNew:hover, .confirmEdit:hover, .cancel:hover {
+    filter: brightness(90%);
 }
 
-label {
-    margin: 10px 0 0 10px;
-    padding: 0;
+.confirmNew, .confirmEdit {
+    border: 1px solid rgb(0, 150, 0);
+    border-radius: 5px;
 }
 
-#modalHead, #modalNewMenu, #newItem, #header, .folder {
+.cancel {
+    border: 1px solid rgb(255, 0, 0);
+    border-radius: 5px;
+}
+
+.folder, .checkCompleted, .detailsBtn {
+    cursor: pointer;
+}
+
+#header, #modalNew, #modalEditToDo, #modalEditFolder, .folder, .detailsBtn, .controls {
     user-select: none;
 }
