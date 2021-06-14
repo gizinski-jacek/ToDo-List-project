@@ -41,13 +41,13 @@ export const editToDoTargetFolder = document.getElementById('editTargetFolder');
 export const editFolderTitle = document.getElementById('editFolderTitle');
 
 const createPara = (text) => {
-    let para = document.createElement('p');
+    const para = document.createElement('p');
     para.textContent = text;
     return para;
 }
 
 const createToDoContainer = (item) => {
-    let main = document.createElement('div');
+    const main = document.createElement('div');
     main.id = Libs.libraryToDos.indexOf(item);
     main.classList.add('todo', 'priority' + item.getPriority);
     if (item.getStatus) {
@@ -57,11 +57,11 @@ const createToDoContainer = (item) => {
         main.classList.add('outdated');
     }
 
-    let contFew = document.createElement('div');
+    const contFew = document.createElement('div');
     contFew.classList.add('fewDetails');
 
-    let div1 = document.createElement('div');
-    let check = document.createElement('div');
+    const div1 = document.createElement('div');
+    const check = document.createElement('div');
     check.classList.add('checkCompleted');
     check.addEventListener('click', (e) => {
         changeStatus(e.target.closest('.todo'));
@@ -69,7 +69,7 @@ const createToDoContainer = (item) => {
     div1.append(check);
     div1.append(createPara(item.getDueDate + '\u00A0\u00A0\u00A0' + item.getTitle));
 
-    let div2 = document.createElement('div');
+    const div2 = document.createElement('div');
     div2.classList.add('controls');
     div2.append(createDetailsBtn());
     div2.append(createEditBtn());
@@ -78,7 +78,7 @@ const createToDoContainer = (item) => {
     contFew.append(div1);
     contFew.append(div2);
 
-    let contMore = document.createElement('div');
+    const contMore = document.createElement('div');
     contMore.classList.add('moreDetails');
     contMore.append(createPara(item.getDescription));
     contMore.append(createPara('Folder: ' + item.getTargetFolder));
@@ -90,15 +90,14 @@ const createToDoContainer = (item) => {
 }
 
 const createFolderContainer = (item) => {
-    let main = document.createElement('div');
+    const main = document.createElement('div');
     main.id = Libs.libraryFolders.indexOf(item);
-    main.textContent = item.getTitle;
     main.classList.add('folder');
-    main.addEventListener('click', () => {
-        Main.updateCurrentOpenFolder(item.getTitle);
-        Main.displayToDos();
+    main.textContent = item.getTitle;
+    main.addEventListener('click', (e) => {
+        Main.changeFolder(e.currentTarget.firstChild.textContent, e.currentTarget);
     })
-    let sub = document.createElement('span');
+    const sub = document.createElement('span');
     sub.classList.add('controls');
     sub.append(createEditBtn());
     sub.append(createDelBtn());
@@ -110,7 +109,7 @@ const createFolderContainer = (item) => {
 }
 
 const createCounter = () => {
-    const counter = createPara(0);
+    const counter = document.createElement('span');
     counter.classList.add('counter');
     return counter;
 }
@@ -133,7 +132,6 @@ const createDelBtn = () => {
     deleteBtn.alt = 'Delete';
     deleteBtn.addEventListener('click', (e) => {
         deleteItem(e.target.closest('.folder, .todo'));
-        e.stopPropagation();
     })
     return deleteBtn;
 }
@@ -146,7 +144,6 @@ const createEditBtn = () => {
     editBtn.alt = 'Edit';
     editBtn.addEventListener('click', (e) => {
         editItem(e.target.closest('.folder, .todo'));
-        e.stopPropagation();
     })
     return editBtn;
 }
@@ -180,13 +177,13 @@ const loadEditFolder = (item) => {
 const updateSelectList = () => {
     selectList.forEach(select => {
         select.innerHTML = '';
-        let inbox = document.createElement('option');
+        const inbox = document.createElement('option');
         inbox.value = 'Inbox';
         inbox.textContent = 'Inbox';
         select.append(inbox);
 
         Libs.libraryFolders.forEach(folder => {
-            let option = document.createElement('option');
+            const option = document.createElement('option');
             option.value = folder.getTitle;
             option.textContent = folder.getTitle;
             select.append(option);
@@ -195,10 +192,10 @@ const updateSelectList = () => {
 }
 
 const counterUpdate = () => {
-    let allCounters = document.querySelectorAll('.counter');
+    const allCounters = document.querySelectorAll('.counter');
     allCounters.forEach(counter => {
-        let id = counter.closest('div').firstChild.textContent;
-        let count = Libs.filterToDoList(id).length;
+        const id = counter.closest('div').firstChild.textContent;
+        const count = Libs.filterToDoList(id).length;
         counter.textContent = count;
     })
 }
@@ -208,16 +205,16 @@ const deleteItem = (el) => {
         Libs.libraryToDos.splice(el.id, 1);
     } else if (el.classList.contains('folder')) {
         Libs.libraryFolders.splice(el.id, 1);
+        Main.updateCurrentOpenFolder('Inbox');
         Libs.libraryToDos.forEach(todo => {
             if (todo.getTargetFolder === el.firstChild.textContent) {
                 todo.setTargetFolder = 'Inbox';
             }
         })
     }
-    Main.updateCurrentOpenFolder();
-    Libs.saveAllLibraries(); Main.displayFolders();
+    Libs.saveAllLibraries();
+    Main.displayFolders();
     Main.displayToDos();
-    
     updateSelectList();
     counterUpdate();
 }
