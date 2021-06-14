@@ -3,32 +3,46 @@ import * as Libs from './Libs';
 
 'use strict'
 
-let currentOpenFolder;
+let currentOpenFolder = 'Inbox';
 
-const updateCurrentOpenFolder = (id = 'Inbox') => {
+const updateCurrentOpenFolder = (id) => {
     containerToDos.className = id;
     currentOpenFolder = id;
 }
 
-DOMman.newItem.onclick = () => {
-    modalClose(modalNew);
-    modalNewToDo.style.display = 'flex';
+const setActive = (el) => {
+    const folders = document.querySelectorAll('.folder');
+    folders.forEach(folder => {
+        folder.classList.remove('active');
+    })
+    el.classList.add('active');
 }
 
-DOMman.newToDoBtn.onclick = () => {
-    modalClose(modalNew);
-    modalNewToDo.style.display = 'flex';
-}
-
-DOMman.newFolderBtn.onclick = () => {
-    modalClose(modalNew);
-    modalNewFolder.style.display = 'flex';
+const changeFolder = (id, el) => {
+    updateCurrentOpenFolder(id);
+    setActive(el);
+    displayToDos();
 }
 
 window.onclick = (e) => {
     if (e.target == DOMman.modalNew || e.target == DOMman.modalEditToDo || e.target == DOMman.modalEditFolder) {
         modalClose();
     }
+}
+
+DOMman.newItem.onclick = () => {
+    modalClose(DOMman.modalNew);
+    DOMman.modalNewToDo.style.display = 'flex';
+}
+
+DOMman.newToDoBtn.onclick = () => {
+    modalClose(DOMman.modalNew);
+    DOMman.modalNewToDo.style.display = 'flex';
+}
+
+DOMman.newFolderBtn.onclick = () => {
+    modalClose(DOMman.modalNew);
+    DOMman.modalNewFolder.style.display = 'flex';
 }
 
 DOMman.buttonsX.forEach(cancel => {
@@ -56,18 +70,15 @@ const modalClose = (modal = undefined) => {
 }
 
 DOMman.inboxToDos.addEventListener('click', (e) => {
-    updateCurrentOpenFolder(e.target.id);
-    displayToDos();
+    changeFolder(e.currentTarget.id, e.currentTarget);
 })
 
 DOMman.todayToDos.addEventListener('click', (e) => {
-    updateCurrentOpenFolder(e.target.id);
-    displayToDos();
+    changeFolder(e.currentTarget.id, e.currentTarget);
 })
 
 DOMman.weekToDos.addEventListener('click', (e) => {
-    updateCurrentOpenFolder(e.target.id);
-    displayToDos();
+    changeFolder(e.currentTarget.id, e.currentTarget) ;
 })
 
 DOMman.dropdownFolders.onclick = () => {
@@ -100,11 +111,11 @@ DOMman.confirmNew.forEach(confirm => {
 })
 
 const saveNewToDoData = () => {
-    let title = DOMman.newToDoTitle.value;
-    let description = DOMman.newToDoDescription.value;
-    let dueDate = DOMman.newToDoDueDate.value;
-    let priority = DOMman.newToDoPriority.value;
-    let targetFolder = DOMman.newToDoTargetFolder.value;
+    const title = DOMman.newToDoTitle.value;
+    const description = DOMman.newToDoDescription.value;
+    const dueDate = DOMman.newToDoDueDate.value;
+    const priority = DOMman.newToDoPriority.value;
+    const targetFolder = DOMman.newToDoTargetFolder.value;
     new Libs.ToDo(title, description, dueDate, priority, targetFolder);
     Libs.saveAllLibraries();
     displayFolders();
@@ -124,7 +135,7 @@ const saveNewFolderData = () => {
 
 const displayToDos = () => {
     DOMman.containerToDos.innerHTML = '';
-    let filteredList = Libs.filterToDoList(currentOpenFolder);
+    const filteredList = Libs.filterToDoList(currentOpenFolder);
     filteredList.forEach(todo => {
         DOMman.containerToDos.append(DOMman.createToDoContainer(todo));
     })
@@ -183,8 +194,8 @@ const editFolderData = (id) => {
     Libs.libraryFolders[id].setTitle = DOMman.editFolderTitle.value;
 
     Libs.saveAllLibraries();
-    displayToDos();
     displayFolders();
+    displayToDos();
     saveCloseClear();
     DOMman.updateSelectList();
     DOMman.counterUpdate();
@@ -211,7 +222,6 @@ if ((Libs.libraryToDos.length === 0) && (Libs.libraryFolders.length === 0)) {
     Libs.loadDefaults();
 }
 
-updateCurrentOpenFolder();
 Libs.checkOutdated();
 displayFolders();
 displayToDos();
@@ -223,4 +233,6 @@ export {
     updateCurrentOpenFolder,
     displayToDos,
     displayFolders,
+    setActive,
+    changeFolder,
 }
