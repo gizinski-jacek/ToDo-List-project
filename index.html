@@ -1,126 +1,170 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>ToDo List</title>
-    <meta charset='UTF-8' />
-    <link href='reset.css' rel='stylesheet' type='text/css'>
-    <link href='style.css' rel='stylesheet' type='text/css'>
-</head>
-<body>
-    <div id='header'>
-        <h1>Your ToDo's</h1>
-        <span id='newItem'>+</span>
-    </div>
-    <div class='main'>
-        <div class='menu'>
-            <div>
-                <div id='Inbox' class='folder'>Inbox<span class="counter">0</span></div>
-                <div id='Today' class='folder'>Today<span class="counter">0</span></div>
-                <div id='Week' class='folder'>Week<span class="counter">0</span></div>
-                <div id='dropdownFolders' class='folder'>Folders...</div>
-            </div>
-            <span id='containerFolders'>
-
-            </span>
+    <head>
+        <title>ToDo List</title>
+        <meta charset="UTF-8" />
+        <link href="reset.css" rel="stylesheet" type="text/css" />
+        <link href="style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="header">
+            <h1>Your ToDo's</h1>
+            <span id="newItem">+</span>
         </div>
-        <div id='containerToDos'>
-
-        </div>
-    </div>
-    <div id='modalNew'>
-        <div class='modalContainer'>
-            <div id='modalHead'>
-                <h2>Create new...</h2>
-                <span class='button-X'>x</span>
-            </div>
-            <div class='modalBody'>
-                <div id='modalNewMenu'>
-                    <span id='newToDoBtn'>ToDo</span>
-                    <span id='newFolderBtn'>Folder</span>
+        <div class="main">
+            <div class="menu">
+                <div>
+                    <div id="Inbox" class="folder">
+                        Inbox<span class="counter">0</span>
+                    </div>
+                    <div id="Today" class="folder">
+                        Today<span class="counter">0</span>
+                    </div>
+                    <div id="Week" class="folder">
+                        Week<span class="counter">0</span>
+                    </div>
+                    <div id="dropdownFolders" class="folder">Folders...</div>
                 </div>
-                <form id='modalNewToDo'>
-                    <label for='newToDoTitle'>ToDo Title</label>
-                    <input id='newToDoTitle' type='text' placeholder='ToDo Title'>
-                    <label for='newToDoDescription'>Description</label>
-                    <textarea id='newToDoDescription' placeholder='Description'></textarea>
-                    <label for='newDueDate'>Due Date</label>
-                    <input id='newDueDate' type='date' min='2021-01-01' max='2200-12-31'>
-                    <label>Priority</label>
-                    <select id='newPriority'>
-                        <option value='High' selected>High</option>
-                        <option value='Medium'>Medium</option>
-                        <option value='Low'>Low</option>
-                    </select>
-                    <label>Folder</label>
-                    <select id='newTargetFolder' class='selectList'>
-                    
-                    </select>
-                    <div class='modalControls'>
-                        <button class='confirmNew' type='button'>Create ToDo</button>
-                        <button class='cancel' type='button'>Cancel</button>
+                <span id="containerFolders"> </span>
+            </div>
+            <div id="containerToDos"></div>
+        </div>
+        <div id="modalNew">
+            <div class="modalContainer">
+                <div id="modalHead">
+                    <h2>Create new...</h2>
+                    <span class="button-X">x</span>
+                </div>
+                <div class="modalBody">
+                    <div id="modalNewMenu">
+                        <span id="newToDoBtn">ToDo</span>
+                        <span id="newFolderBtn">Folder</span>
                     </div>
-                </form>
-                <form id='modalNewFolder'>
-                    <label for='newFolderTitle'>Folder Title</label>
-                    <input id='newFolderTitle' type='text' placeholder='Folder Title'>
-                    <div class='modalControls'>
-                        <button class='confirmNew' type='button'>Create Folder</button>
-                        <button class='cancel' type='button'>Cancel</button>
-                    </div>
-                </form>
+                    <form id="modalNewToDo">
+                        <label for="newToDoTitle">ToDo Title</label>
+                        <input
+                            id="newToDoTitle"
+                            type="text"
+                            placeholder="ToDo Title"
+                        />
+                        <label for="newToDoDescription">Description</label>
+                        <textarea
+                            id="newToDoDescription"
+                            placeholder="Description"
+                        ></textarea>
+                        <label for="newDueDate">Due Date</label>
+                        <input
+                            id="newDueDate"
+                            type="date"
+                            min="2021-01-01"
+                            max="2200-12-31"
+                        />
+                        <label>Priority</label>
+                        <select id="newPriority">
+                            <option value="High" selected>High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                        <label>Folder</label>
+                        <select
+                            id="newTargetFolder"
+                            class="selectList"
+                        ></select>
+                        <div class="modalControls">
+                            <button class="confirmNew" type="button">
+                                Create ToDo
+                            </button>
+                            <button class="cancel" type="button">Cancel</button>
+                        </div>
+                    </form>
+                    <form id="modalNewFolder">
+                        <label for="newFolderTitle">Folder Title</label>
+                        <input
+                            id="newFolderTitle"
+                            type="text"
+                            placeholder="Folder Title"
+                        />
+                        <div class="modalControls">
+                            <button class="confirmNew" type="button">
+                                Create Folder
+                            </button>
+                            <button class="cancel" type="button">Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <div id='modalEditToDo'>
-        <div class='modalContainer'>
-            <div id='modalHead'>
-                <h2>Edit ToDo...</h2>
-                <span class='button-X'>x</span>
-            </div>
-            <div class='modalBody'>
-                <form>
-                    <label for='editToDoTitle'>ToDo Title</label>
-                    <input id='editToDoTitle' type='text' placeholder='ToDo Title'>
-                    <label for='editToDoDescription'>Description</label>
-                    <textarea id='editToDoDescription' placeholder='Description'></textarea>
-                    <label for='editDueDate'>Due Date</label>
-                    <input id='editDueDate' type='date' min='2021-01-01' max='2200-12-31'>
-                    <label>Priority</label>
-                    <select id='editPriority'>
-                        <option value='High'>High</option>
-                        <option value='Medium'>Medium</option>
-                        <option value='Low'>Low</option>
-                    </select>
-                    <label>Folder</label>
-                    <select id='editTargetFolder' class='selectList'>
-                        
-                    </select>
-                    <div class='modalControls'>
-                        <button class='confirmEdit' type='button'>Confirm</button>
-                        <button class='cancel' type='button'>Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div id='modalEditFolder'>
-        <div class='modalContainer'>
-            <div id='modalHead'>
-                <h2>Edit Folder...</h2>
-                <span class='button-X'>x</span>
-            </div>
-            <div class='modalBody'>
-                <form>
-                    <label for='editFolderTitle'>Folder Title</label>
-                    <input id='editFolderTitle' type='text' placeholder='Folder Name'>
-                    <div class='modalControls'>
-                        <button class='confirmEdit' type='button'>Confirm</button>
-                        <button class='cancel' type='button'>Cancel</button>
-                    </div>
-                </form>
+        <div id="modalEditToDo">
+            <div class="modalContainer">
+                <div id="modalHead">
+                    <h2>Edit ToDo...</h2>
+                    <span class="button-X">x</span>
+                </div>
+                <div class="modalBody">
+                    <form>
+                        <label for="editToDoTitle">ToDo Title</label>
+                        <input
+                            id="editToDoTitle"
+                            type="text"
+                            placeholder="ToDo Title"
+                        />
+                        <label for="editToDoDescription">Description</label>
+                        <textarea
+                            id="editToDoDescription"
+                            placeholder="Description"
+                        ></textarea>
+                        <label for="editDueDate">Due Date</label>
+                        <input
+                            id="editDueDate"
+                            type="date"
+                            min="2021-01-01"
+                            max="2200-12-31"
+                        />
+                        <label>Priority</label>
+                        <select id="editPriority">
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                        <label>Folder</label>
+                        <select
+                            id="editTargetFolder"
+                            class="selectList"
+                        ></select>
+                        <div class="modalControls">
+                            <button class="confirmEdit" type="button">
+                                Confirm
+                            </button>
+                            <button class="cancel" type="button">Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <script src='main.js' type='text/javascript'></script>
-</body>
+        <div id="modalEditFolder">
+            <div class="modalContainer">
+                <div id="modalHead">
+                    <h2>Edit Folder...</h2>
+                    <span class="button-X">x</span>
+                </div>
+                <div class="modalBody">
+                    <form>
+                        <label for="editFolderTitle">Folder Title</label>
+                        <input
+                            id="editFolderTitle"
+                            type="text"
+                            placeholder="Folder Name"
+                        />
+                        <div class="modalControls">
+                            <button class="confirmEdit" type="button">
+                                Confirm
+                            </button>
+                            <button class="cancel" type="button">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="main.js" type="text/javascript"></script>
+    </body>
 </html>
