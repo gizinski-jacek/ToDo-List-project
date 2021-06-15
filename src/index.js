@@ -1,62 +1,66 @@
 import * as DOMman from './DOMman';
 import * as Libs from './Libs';
 
-'use strict'
+('use strict');
 
 let currentOpenFolder = 'Inbox';
 
 const updateCurrentOpenFolder = (id) => {
     DOMman.containerToDos.className = id;
     currentOpenFolder = id;
-}
+};
 
 const setActive = (el) => {
     const folders = document.querySelectorAll('.folder');
-    folders.forEach(folder => {
+    folders.forEach((folder) => {
         folder.classList.remove('active');
-    })
+    });
     el.classList.add('active');
-}
+};
 
 const changeFolder = (id, el) => {
     updateCurrentOpenFolder(id);
     setActive(el);
     displayToDos();
-}
+};
 
-window.onclick = (e) => {
-    if (e.target == DOMman.modalNew || e.target == DOMman.modalEditToDo || e.target == DOMman.modalEditFolder) {
+window.addEventListener('click', (e) => {
+    if (
+        e.target == DOMman.modalNew ||
+        e.target == DOMman.modalEditToDo ||
+        e.target == DOMman.modalEditFolder
+    ) {
         modalClose();
     }
-}
+});
 
-DOMman.newItem.onclick = () => {
+DOMman.addEventListener('click', () => {
     modalClose(DOMman.modalNew);
     DOMman.modalNewToDo.style.display = 'flex';
-}
+});
 
-DOMman.newToDoBtn.onclick = () => {
+DOMman.addEventListener('click', () => {
     modalClose(DOMman.modalNew);
     DOMman.modalNewToDo.style.display = 'flex';
-}
+});
 
-DOMman.newFolderBtn.onclick = () => {
+DOMman.addEventListener('click', () => {
     modalClose(DOMman.modalNew);
     DOMman.modalNewFolder.style.display = 'flex';
-}
+});
 
-DOMman.buttonsX.forEach(cancel => {
-    cancel.onclick = () => {
+DOMman.buttonsX.forEach((cancel) => {
+    cancel.addEventListener('click', () => {
         modalClose();
-    }
-})
+    });
+});
 
-DOMman.cancels.forEach(cancel => {
-    cancel.onclick = () => {
+DOMman.cancels.forEach((cancel) => {
+    cancel.addEventListener('click', () => {
         modalClose();
         clearForms();
-    }
-})
+    });
+});
 
 const modalClose = (modal = undefined) => {
     DOMman.modalNew.style.display = 'none';
@@ -67,32 +71,36 @@ const modalClose = (modal = undefined) => {
     if (modal !== undefined) {
         modal.style.display = 'flex';
     }
-}
+};
 
 DOMman.inboxToDos.addEventListener('click', (e) => {
     changeFolder(e.currentTarget.id, e.currentTarget);
-})
+});
 
 DOMman.todayToDos.addEventListener('click', (e) => {
     changeFolder(e.currentTarget.id, e.currentTarget);
-})
+});
 
 DOMman.weekToDos.addEventListener('click', (e) => {
-    changeFolder(e.currentTarget.id, e.currentTarget) ;
-})
+    changeFolder(e.currentTarget.id, e.currentTarget);
+});
 
-DOMman.dropdownFolders.onclick = () => {
+DOMman.dropdownFolders.addEventListener('click', () => {
     DOMman.containerFolders.classList.toggle('show');
-}
+});
 
-DOMman.confirmNew.forEach(confirm => {
-    confirm.onclick = (e) => {
+DOMman.confirmNew.forEach((confirm) => {
+    confirm.addEventListener('click', (e) => {
         if (e.target.closest('form') == DOMman.modalNewToDo) {
             if (DOMman.newToDoTitle.value == '') {
                 alert('No title provided!');
             } else if (DOMman.newToDoDueDate.value == '') {
                 alert('No date provided!');
-            } else if (Libs.libraryToDos.find(todo => todo.getTitle === DOMman.newToDoTitle.value)) {
+            } else if (
+                Libs.libraryToDos.find(
+                    (todo) => todo.getTitle === DOMman.newToDoTitle.value
+                )
+            ) {
                 alert('ToDo already exists! Provide unique title.');
             } else {
                 saveNewToDoData();
@@ -101,14 +109,18 @@ DOMman.confirmNew.forEach(confirm => {
         if (e.target.closest('form') == DOMman.modalNewFolder) {
             if (DOMman.newFolderTitle.value == '') {
                 alert('No title provided!');
-            } else if (Libs.libraryFolders.find(folder => folder.getTitle === DOMman.newFolderTitle.value)) {
+            } else if (
+                Libs.libraryFolders.find(
+                    (folder) => folder.getTitle === DOMman.newFolderTitle.value
+                )
+            ) {
                 alert('Folder already exists! Provide unique title.');
             } else {
                 saveNewFolderData();
             }
         }
-    }
-})
+    });
+});
 
 const saveNewToDoData = () => {
     const title = DOMman.newToDoTitle.value;
@@ -122,7 +134,7 @@ const saveNewToDoData = () => {
     displayToDos();
     saveCloseClear();
     DOMman.counterUpdate();
-}
+};
 
 const saveNewFolderData = () => {
     new Libs.Folder(DOMman.newFolderTitle.value);
@@ -131,25 +143,25 @@ const saveNewFolderData = () => {
     saveCloseClear();
     DOMman.updateSelectList();
     DOMman.counterUpdate();
-}
+};
 
 const displayToDos = () => {
     DOMman.containerToDos.innerHTML = '';
     const filteredList = Libs.filterToDoList(currentOpenFolder);
-    filteredList.forEach(todo => {
+    filteredList.forEach((todo) => {
         DOMman.containerToDos.append(DOMman.createToDoContainer(todo));
-    })
-}
+    });
+};
 
 const displayFolders = () => {
     DOMman.containerFolders.innerHTML = '';
-    Libs.libraryFolders.forEach(item => {
+    Libs.libraryFolders.forEach((item) => {
         DOMman.containerFolders.append(DOMman.createFolderContainer(item));
-    })
-}
+    });
+};
 
-DOMman.confirmEdit.forEach(confirm => {
-    confirm.onclick = (e) => {
+DOMman.confirmEdit.forEach((confirm) => {
+    confirm.addEventListener('click', (e) => {
         if (e.target.closest('form').classList.contains('editToDo')) {
             if (DOMman.editToDoTitle.value == '') {
                 alert('No title provided!');
@@ -166,8 +178,8 @@ DOMman.confirmEdit.forEach(confirm => {
                 editFolderData(e.target.closest('form').id);
             }
         }
-    }
-})
+    });
+});
 
 const editToDoData = (id) => {
     Libs.libraryToDos[id].setTitle = DOMman.editToDoTitle.value;
@@ -180,16 +192,16 @@ const editToDoData = (id) => {
     saveCloseClear();
     DOMman.updateSelectList();
     DOMman.counterUpdate();
-}
+};
 
 const editFolderData = (id) => {
-    Libs.libraryToDos.forEach(todo => {
+    Libs.libraryToDos.forEach((todo) => {
         if (todo.getTargetFolder === Libs.libraryFolders[id].getTitle) {
             todo.setTargetFolder = DOMman.editFolderTitle.value;
         }
-    })
+    });
     if (currentOpenFolder === Libs.libraryFolders[id].getTitle) {
-        updateCurrentOpenFolder(DOMman.editFolderTitle.value)
+        updateCurrentOpenFolder(DOMman.editFolderTitle.value);
     }
     Libs.libraryFolders[id].setTitle = DOMman.editFolderTitle.value;
 
@@ -199,26 +211,29 @@ const editFolderData = (id) => {
     saveCloseClear();
     DOMman.updateSelectList();
     DOMman.counterUpdate();
-}
+};
 
 const clearForms = () => {
-    document.querySelectorAll('form').forEach(form => {
+    document.querySelectorAll('form').forEach((form) => {
         form.reset();
-    })
-}
+    });
+};
 
 const saveCloseClear = () => {
     Libs.saveAllLibraries();
     modalClose();
     clearForms();
-}
+};
 
-if ((!localStorage.getItem('libraryToDos')) && (!localStorage.getItem('libraryFolders'))) {
+if (
+    !localStorage.getItem('libraryToDos') &&
+    !localStorage.getItem('libraryFolders')
+) {
     Libs.loadDefaults();
 }
 
 // Should I populate with defaults if user decides to delete all folders and todos?
-if ((Libs.libraryToDos.length === 0) && (Libs.libraryFolders.length === 0)) {
+if (Libs.libraryToDos.length === 0 && Libs.libraryFolders.length === 0) {
     Libs.loadDefaults();
 }
 
@@ -235,4 +250,4 @@ export {
     displayFolders,
     setActive,
     changeFolder,
-}
+};
