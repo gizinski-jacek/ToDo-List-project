@@ -6,7 +6,7 @@ import * as Libs from './Libs';
 let currentOpenFolder = 'Inbox';
 
 const updateCurrentOpenFolder = (id) => {
-    containerToDos.className = id;
+    DOMman.containerToDos.className = id;
     currentOpenFolder = id;
 }
 
