@@ -85,8 +85,9 @@ DOMman.weekToDos.addEventListener('click', (e) => {
     changeFolder(e.currentTarget.id, e.currentTarget);
 });
 
-DOMman.dropdownFolders.addEventListener('click', () => {
-    DOMman.containerFolders.classList.toggle('show');
+DOMman.dropFolders.addEventListener('click', () => {
+    DOMman.containerFolders.classList.toggle('drop');
+    DOMman.arrow.classList.toggle('rotate');
 });
 
 DOMman.confirmNew.forEach((confirm) => {
