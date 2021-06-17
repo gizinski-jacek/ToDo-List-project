@@ -34,17 +34,17 @@ window.addEventListener('click', (e) => {
     }
 });
 
-DOMman.addEventListener('click', () => {
+DOMman.newItem.addEventListener('click', () => {
     modalClose(DOMman.modalNew);
     DOMman.modalNewToDo.style.display = 'flex';
 });
 
-DOMman.addEventListener('click', () => {
+DOMman.newToDoBtn.addEventListener('click', () => {
     modalClose(DOMman.modalNew);
     DOMman.modalNewToDo.style.display = 'flex';
 });
 
-DOMman.addEventListener('click', () => {
+DOMman.newFolderBtn.addEventListener('click', () => {
     modalClose(DOMman.modalNew);
     DOMman.modalNewFolder.style.display = 'flex';
 });
