@@ -8,7 +8,8 @@ export const todayToDos = document.getElementById('Today');
 export const weekToDos = document.getElementById('Week');
 export const containerToDos = document.getElementById('containerToDos');
 export const containerFolders = document.getElementById('containerFolders');
-export const dropdownFolders = document.getElementById('dropdownFolders');
+export const arrow = document.querySelector('.arrow');
+export const dropFolders = document.getElementById('dropFolders');
 
 export const newItem = document.getElementById('newItem');
 export const newToDoBtn = document.getElementById('newToDoBtn');
@@ -34,7 +35,9 @@ export const newToDoTargetFolder = document.getElementById('newTargetFolder');
 export const newFolderTitle = document.getElementById('newFolderTitle');
 
 export const editToDoTitle = document.getElementById('editToDoTitle');
-export const editToDoDescription = document.getElementById('editToDoDescription');
+export const editToDoDescription = document.getElementById(
+    'editToDoDescription'
+);
 export const editToDoDueDate = document.getElementById('editDueDate');
 export const editToDoPriority = document.getElementById('editPriority');
 export const editToDoTargetFolder = document.getElementById('editTargetFolder');
@@ -127,7 +130,7 @@ const createDetailsBtn = () => {
         e.target
             .closest('.todo')
             .querySelectorAll('.moreDetails')[0]
-            .classList.toggle('show');
+            .classList.toggle('drop');
     });
     return detailsBtn;
 };
