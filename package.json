@@ -1,21 +1,21 @@
 {
-  "name": "jstodolistproject",
+  "name": "todolistproject",
   "version": "1.0.0",
-  "description": "",
+  "description": "ToDo List project",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mrjackmaster/jsToDoListProject.git"
+    "url": "git+https://github.com/gizinski-jacek/ToDo-List-project.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mrjackmaster/jsToDoListProject/issues"
+    "url": "https://github.com/gizinski-jacek/ToDo-List-project/issues"
   },
-  "homepage": "https://github.com/mrjackmaster/jsToDoListProject#readme",
+  "homepage": "https://github.com/gizinski-jacek/ToDo-List-project#readme",
   "devDependencies": {
     "eslint": "^7.28.0",
     "prettier": "2.3.1",
