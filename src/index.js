@@ -149,7 +149,10 @@ const saveNewFolderData = () => {
 const displayToDos = () => {
     DOMman.containerToDos.innerHTML = '';
     const filteredList = Libs.filterToDoList(currentOpenFolder);
-    filteredList.forEach((todo) => {
+    const sortedList = filteredList.sort(
+        (a, b) => new Date(b.getDueDate) - new Date(a.getDueDate)
+    );
+    sortedList.forEach((todo) => {
         DOMman.containerToDos.append(DOMman.createToDoContainer(todo));
     });
 };
