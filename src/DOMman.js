@@ -64,15 +64,17 @@ const createToDoContainer = (item) => {
     contFew.classList.add('fewDetails');
 
     const div1 = document.createElement('div');
+    div1.classList.add('metadata');
     const check = document.createElement('div');
     check.classList.add('checkCompleted');
     check.addEventListener('click', (e) => {
         changeStatus(e.target.closest('.todo'));
     });
     div1.append(check);
-    div1.append(
-        createPara(item.getDueDate + '\u00A0\u00A0\u00A0' + item.getTitle)
-    );
+    const span = document.createElement('span');
+    span.append(createPara(item.getDueDate));
+    span.append(createPara(item.getTitle));
+    div1.append(span);
 
     const div2 = document.createElement('div');
     div2.classList.add('controls');
@@ -98,7 +100,9 @@ const createFolderContainer = (item) => {
     const main = document.createElement('div');
     main.id = Libs.libraryFolders.indexOf(item);
     main.classList.add('folder');
-    main.textContent = item.getTitle;
+    const h3 = document.createElement('h3');
+    h3.textContent = item.getTitle;
+    main.appendChild(h3);
     main.addEventListener('click', (e) => {
         Main.changeFolder(
             e.currentTarget.firstChild.textContent,
@@ -129,15 +133,14 @@ const createDetailsBtn = () => {
     detailsBtn.addEventListener('click', (e) => {
         e.target
             .closest('.todo')
-            .querySelectorAll('.moreDetails')[0]
+            .querySelector('.moreDetails')
             .classList.toggle('drop');
     });
     return detailsBtn;
 };
 
 const createDelBtn = () => {
-    const deleteBtn = document.createElement('input');
-    deleteBtn.setAttribute('type', 'image');
+    const deleteBtn = document.createElement('img');
     deleteBtn.classList.add('deleteBtn');
     deleteBtn.src = 'imgs/delete-64.png';
     deleteBtn.alt = 'Delete';
@@ -148,8 +151,7 @@ const createDelBtn = () => {
 };
 
 const createEditBtn = () => {
-    const editBtn = document.createElement('input');
-    editBtn.setAttribute('type', 'image');
+    const editBtn = document.createElement('img');
     editBtn.classList.add('editBtn');
     editBtn.src = 'imgs/edit-64.png';
     editBtn.alt = 'Edit';
