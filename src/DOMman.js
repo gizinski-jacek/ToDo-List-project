@@ -133,6 +133,10 @@ const createDetailsBtn = () => {
     detailsBtn.addEventListener('click', (e) => {
         e.target
             .closest('.todo')
+            .querySelector('.fewDetails')
+            .classList.toggle('drop');
+        e.target
+            .closest('.todo')
             .querySelector('.moreDetails')
             .classList.toggle('drop');
     });
