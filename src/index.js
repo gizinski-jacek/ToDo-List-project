@@ -86,6 +86,7 @@ DOMman.weekToDos.addEventListener('click', (e) => {
 });
 
 DOMman.dropFolders.addEventListener('click', () => {
+    DOMman.dropFolders.classList.toggle('drop');
     DOMman.containerFolders.classList.toggle('drop');
     DOMman.arrow.classList.toggle('rotate');
 });
