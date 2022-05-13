@@ -211,7 +211,7 @@ const updateSelectList = () => {
 const counterUpdate = () => {
     const allCounters = document.querySelectorAll('.counter');
     allCounters.forEach((counter) => {
-        const id = counter.closest('div').firstChild.textContent;
+        const id = counter.closest('.folder').id;
         const count = Libs.filterToDoList(id).length;
         counter.textContent = count;
     });
