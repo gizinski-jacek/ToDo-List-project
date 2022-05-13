@@ -17,7 +17,11 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 4px;
-    background-color: rgb(255, 150, 25);
+    background: linear-gradient(
+        to bottom right,
+        rgb(255, 150, 25),
+        rgba(255, 150, 25, 0.5) 80%
+    );
 }
 
 h1 {
@@ -54,8 +58,13 @@ h1 {
 .menu {
     display: flex;
     flex-direction: column;
-    max-width: fit-content;
-    background-color: rgba(150, 255, 255);
+    width: fit-content;
+    max-width: 300px;
+    background: linear-gradient(
+        to right,
+        rgb(150, 255, 255),
+        rgba(150, 255, 255, 0.5)
+    );
 }
 
 .folder {
@@ -66,18 +75,19 @@ h1 {
     padding: 4px 8px;
     text-align: left;
     font-size: 1.2rem;
-    background-color: rgba(75, 255, 255);
+    background-color: rgb(0, 225, 225);
     border: 1px solid rgba(0, 100, 100, 0.3);
     border-radius: 5px;
+    transition: 0.25s ease-in-out;
 }
 
 .folder:hover {
-    background-color: rgb(0, 255, 255);
     box-shadow: 0 0 3px rgb(0, 0, 0);
+    filter: brightness(110%);
 }
 
 .active {
-    background-color: rgb(0, 240, 240) !important;
+    background-color: rgba(0, 245, 245);
     border-color: rgba(0, 100, 100, 0.6);
     box-shadow: 0 0 3px rgb(0, 0, 0);
 }
@@ -99,12 +109,12 @@ h1 {
 .arrow {
     font-size: 1rem;
     margin: 0 4px;
-    transition: 200ms ease-in-out;
+    transition: 0.25s ease-in-out;
     transform: rotateX(0deg) scale(2) translateY(15%);
 }
 
 .rotate {
-    transition: 300ms ease-in-out;
+    transition: 0.25s ease-in-out;
     transform: rotateX(180deg) scale(2) translateY(15%);
 }
 
@@ -120,13 +130,18 @@ h1 {
 
 #containerFolders.drop {
     display: flex;
-    animation: drop 300ms ease-in-out;
+    animation: drop 0.25s ease-in-out;
     transform-origin: top center;
+}
+
+.fewDetails.drop {
+    display: flex;
+    border-bottom: 1px solid rgb(0, 0, 0);
 }
 
 .moreDetails.drop {
     display: flex;
-    animation: drop 200ms ease-in-out;
+    animation: drop 0.25s ease-in-out;
     transform-origin: top center;
 }
 
@@ -174,7 +189,11 @@ img {
     flex-direction: column;
     flex: 1;
     padding-bottom: 25px;
-    background-color: rgb(225, 225, 200);
+    background: linear-gradient(
+        to bottom right,
+        rgba(200, 200, 175, 0.5),
+        rgb(200, 200, 175)
+    );
     overflow-y: auto;
     scrollbar-color: rgb(125, 125, 125) rgb(225, 225, 200);
 }
@@ -186,6 +205,8 @@ img {
     margin: 25px 25px 0 25px;
     border: 1px solid rgb(100, 100, 100);
     box-shadow: 0 0 4px rgb(50, 50, 50);
+    cursor: pointer;
+    transition: 0.25s ease-in-out;
 }
 
 .todo:hover {
@@ -193,15 +214,18 @@ img {
 }
 
 .priorityHigh {
-    background-color: rgba(255, 50, 50, 0.8);
+    background: linear-gradient(rgba(225, 50, 50, 0.8), rgba(225, 50, 50, 0.5));
 }
 
 .priorityMedium {
-    background-color: rgba(255, 255, 50, 0.6);
+    background: linear-gradient(
+        rgba(255, 255, 50, 0.7),
+        rgba(255, 255, 50, 0.4)
+    );
 }
 
 .priorityLow {
-    background-color: rgba(50, 255, 50, 0.7);
+    background: linear-gradient(rgba(50, 255, 50, 0.7), rgba(50, 255, 50, 0.4));
 }
 
 .completed {
@@ -213,11 +237,11 @@ img {
 }
 
 .outdated {
-    box-shadow: 0 0 6px 4px rgb(255, 0, 0);
+    box-shadow: 0 0 4px 1px rgb(225, 0, 0);
 }
 
 .outdated:hover {
-    box-shadow: 0 0 6px 2px rgb(255, 0, 0);
+    box-shadow: 0 0 4px 2px rgb(225, 0, 0);
 }
 
 .fewDetails {
@@ -269,7 +293,6 @@ img {
     display: none;
     justify-content: space-between;
     padding: 10px;
-    border-top: 1px solid rgb(0, 0, 0);
 }
 
 .moreDetails p:first-child {
