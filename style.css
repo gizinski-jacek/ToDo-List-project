@@ -1,3 +1,8 @@
+:root {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+}
+
 body * {
     font-family: Courier, monospace;
     box-sizing: border-box;
@@ -205,7 +210,6 @@ img {
     margin: 25px 25px 0 25px;
     border: 1px solid rgb(100, 100, 100);
     box-shadow: 0 0 4px rgb(50, 50, 50);
-    cursor: pointer;
     transition: 0.25s ease-in-out;
 }
 
@@ -297,6 +301,11 @@ img {
 
 .moreDetails p:first-child {
     margin: 0 8px;
+}
+
+.editBtn,
+.deleteBtn {
+    cursor: pointer;
 }
 
 #modalNew,
