@@ -131,6 +131,7 @@ const createDetailsBtn = () => {
     detailsBtn.classList.add('detailsBtn');
     detailsBtn.textContent = 'Details';
     detailsBtn.addEventListener('click', (e) => {
+        e.target.classList.toggle('active');
         e.target
             .closest('.todo')
             .querySelector('.fewDetails')
