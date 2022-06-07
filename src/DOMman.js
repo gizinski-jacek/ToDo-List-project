@@ -223,7 +223,7 @@ const deleteItem = (el) => {
         Libs.libraryToDos.splice(el.id, 1);
     } else if (el.classList.contains('folder')) {
         Libs.libraryFolders.splice(el.id, 1);
-        Main.updateCurrentOpenFolder('Inbox');
+        Main.setCurrentOpenFolder('Inbox');
         Libs.libraryToDos.forEach((todo) => {
             if (todo.getTargetFolder === el.firstChild.textContent) {
                 todo.setTargetFolder = 'Inbox';
