@@ -78,7 +78,7 @@ const createToDoContainer = (item) => {
 
     const div2 = document.createElement('div');
     div2.classList.add('controls');
-    div2.append(createDetailsBtn());
+    div2.append(createToDoDetailsBtn());
     div2.append(createEditBtn());
     div2.append(createDelBtn());
 
@@ -113,20 +113,20 @@ const createFolderContainer = (item) => {
     sub.classList.add('controls');
     sub.append(createEditBtn());
     sub.append(createDelBtn());
-    sub.append(createCounter());
+    sub.append(createToDoCounter());
 
     main.append(sub);
 
     return main;
 };
 
-const createCounter = () => {
+const createToDoCounter = () => {
     const counter = document.createElement('span');
     counter.classList.add('counter');
     return counter;
 };
 
-const createDetailsBtn = () => {
+const createToDoDetailsBtn = () => {
     const detailsBtn = document.createElement('div');
     detailsBtn.classList.add('detailsBtn');
     detailsBtn.textContent = 'Details';
