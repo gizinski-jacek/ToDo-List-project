@@ -5,12 +5,12 @@ import * as Libs from './Libs';
 
 let currentOpenFolder = 'Inbox';
 
-const updateCurrentOpenFolder = (id) => {
+const setCurrentOpenFolder = (id) => {
     DOMman.containerToDos.className = id;
     currentOpenFolder = id;
 };
 
-const setActive = (el) => {
+const setFolderActiveClass = (el) => {
     const folders = document.querySelectorAll('.folder');
     folders.forEach((folder) => {
         folder.classList.remove('active');
@@ -19,8 +19,8 @@ const setActive = (el) => {
 };
 
 const changeFolder = (id, el) => {
-    updateCurrentOpenFolder(id);
-    setActive(el);
+    setCurrentOpenFolder(id);
+    setFolderActiveClass(el);
     displayToDos();
 };
 
@@ -206,7 +206,7 @@ const editFolderData = (id) => {
         }
     });
     if (currentOpenFolder === Libs.libraryFolders[id].getTitle) {
-        updateCurrentOpenFolder(DOMman.editFolderTitle.value);
+        setCurrentOpenFolder(DOMman.editFolderTitle.value);
     }
     Libs.libraryFolders[id].setTitle = DOMman.editFolderTitle.value;
 
@@ -237,11 +237,6 @@ if (
     Libs.loadDefaults();
 }
 
-// Should I populate with defaults if user decides to delete all folders and todos?
-if (Libs.libraryToDos.length === 0 && Libs.libraryFolders.length === 0) {
-    Libs.loadDefaults();
-}
-
 Libs.checkOutdated();
 displayFolders();
 displayToDos();
@@ -249,10 +244,4 @@ clearForms();
 DOMman.updateSelectList();
 DOMman.counterUpdate();
 
-export {
-    updateCurrentOpenFolder,
-    displayToDos,
-    displayFolders,
-    setActive,
-    changeFolder,
-};
+export { setCurrentOpenFolder, displayToDos, displayFolders, changeFolder };
