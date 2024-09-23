@@ -524,12 +524,13 @@ textarea {
     margin-top: auto;
     display: flex;
     justify-content: center;
-    padding: 4px;
     background-color: rgb(100, 100, 100);
 }
 
 .footer a {
+    display: block;
     color: rgb(255, 255, 255);
+    padding: 4px;
 }
 
 .footer svg {
