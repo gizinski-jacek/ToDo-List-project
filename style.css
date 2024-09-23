@@ -49,6 +49,33 @@ h1 {
     border-radius: 50%;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
     cursor: pointer;
+    position: relative;
+}
+
+#newItem::before {
+    content: ' ';
+    position: absolute;
+    display: block;
+    background-color: rgb(30, 30, 30);
+    width: 4px;
+    margin-left: -2px;
+    left: 50%;
+    top: 5px;
+    bottom: 5px;
+    z-index: 9;
+}
+
+#newItem::after {
+    content: ' ';
+    position: absolute;
+    display: block;
+    background-color: rgb(30, 30, 30);
+    height: 4px;
+    margin-top: -2px;
+    top: 50%;
+    left: 5px;
+    right: 5px;
+    z-index: 9;
 }
 
 #newItem:hover {
@@ -494,23 +521,19 @@ textarea {
 }
 
 .footer {
-    width: 100%;
-    text-align: center;
-    background-color: rgb(75, 75, 75);
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+    padding: 4px;
+    background-color: rgb(100, 100, 100);
 }
 
 .footer a {
-    font-weight: 600;
     color: rgb(255, 255, 255);
-    padding: 4px;
-    float: right;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
 }
 
 .footer svg {
-    margin: 0 8px;
+    display: block;
     box-sizing: content-box;
     border-radius: 50%;
     padding: 1px;
